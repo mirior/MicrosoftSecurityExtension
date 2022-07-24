@@ -6,7 +6,7 @@ import { KubesecProvider } from './kubesec/kubesec-provider';
 
 
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 kubesec();
 
 const myGates=new GatesProvider();
@@ -25,12 +25,19 @@ vscode.commands.registerCommand('gate.activate',()=>{
  });
 
 vscode.commands.registerCommand('kubesec.showData',async (arg:any[])=>{
-  const filrPath=arg.toString();
-  const result=await sendFile(filrPath);  
-  console.log(filrPath+' : '+result.scoring.advise);
-  let textDocument = await vscode.workspace.openTextDocument(filrPath);
-  await vscode.window.showTextDocument(textDocument);});
-}
+  const filePath=arg.toString();
+  const result=await sendFile(filePath);  
+  //console.log(filePath+' : '+result.scoring.advise);
+  // let textDocument = await vscode.workspace.openTextDocument(filePath);
+  // await vscode.window.showTextDocument(textDocument);});
+  var openPath = vscode.Uri.file(filePath);
+vscode.workspace.openTextDocument(openPath).then(doc => {
+vscode.window.showTextDocument(doc).then(editor => {
+    var range = new vscode.Range(new vscode.Position(10, 4), new vscode.Position(11, 0));
+    editor.revealRange(range);
+   });
+});
+});}
 
 // vscode.commands.registerCommand('gates.errors',()=>{
 //   myGates.setAllViewAsErrors();
