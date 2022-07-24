@@ -1,0 +1,136 @@
+{
+  "name": "microsoft-security-gate",
+  "displayName": "Microsoft Security Gate",
+  "description": "GATES",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "microsoft-security-gate.gates",
+        "title": "Microsoft Security Gate"
+      },
+      {
+        "command": "gate.activate",
+        "title": "Activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "gates.activate-all",
+        "title": "Activate all",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "gates.errors",
+        "title": "view as ERRORS"
+      },
+      {
+        "command": "gates.warnings",
+        "title": "view as WARNINGS"
+      },
+      {
+        "command": "gate.errors",
+        "title": "view as ERRORS"
+      },
+      {
+        "command": "gate.warnings",
+        "title": "view as WARNINGS"
+      },
+      {
+        "command": "kubesec.showData",
+        "title": "a"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "package-explorer",
+          "title": "Microsoft Security Gate",
+          "icon": "$(tasklist)"
+        }
+      ]
+    },
+    "views": {
+      "package-explorer": [
+        {
+          "id": "package-gates",
+          "name": "Gates"
+        },
+        {
+          "id": "package-kubesec",
+          "name": "Kubesec"
+        },
+        {
+          "id": "package-outline",
+          "name": "Outline"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "gates.activate-all",
+          "group": "navigation"
+        },
+        {
+          "command": "gates.errors"
+        },
+        {
+          "command": "gates.warnings"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "gate.activate",
+          "group": "inline"
+        },
+        {
+          "command": "gate.errors"
+        },
+        {
+          "command": "gate.warnings"
+        },
+        {
+          "command": "kubesec.showData",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.69.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.18.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "file-reader": "^1.1.1",
+    "formdata-node": "^4.3.3",
+    "get-all-files": "^4.1.0"
+  }
+}
