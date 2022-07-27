@@ -16,6 +16,27 @@
   "contributes": {
     "commands": [
       {
+        "command": "gates.refreshEntry",
+        "title": "kubesec.refreshEntry",
+        "icon":"$(refresh)"
+        
+      },
+      {
+        "command": "kubesec.activate",
+        "title": "kubesec.activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "kubesec.deactivate",
+        "title": "kubesec.deactivate",
+        "icon": "$(close)"
+      },
+      {
+        "command": "gates.activate",
+        "title": "gates.activate"
+        
+      },      
+      {
         "command": "microsoft-security-gate.gates",
         "title": "Microsoft Security Gate"
       },
@@ -25,29 +46,13 @@
         "icon": "$(check)"
       },
       {
-        "command": "gates.activate-all",
+        "command": "gates.activate",
         "title": "Activate all",
         "icon": "$(check-all)"
-      },
-      {
-        "command": "gates.errors",
-        "title": "view as ERRORS"
-      },
-      {
-        "command": "gates.warnings",
-        "title": "view as WARNINGS"
-      },
-      {
-        "command": "gate.errors",
-        "title": "view as ERRORS"
-      },
-      {
-        "command": "gate.warnings",
-        "title": "view as WARNINGS"
-      },
+      },      
       {
         "command": "kubesec.showData",
-        "title": "a"
+        "title": "kubesec.showData"
       }
     ],
     "viewsContainers": {
@@ -66,42 +71,36 @@
           "name": "Gates"
         },
         {
-          "id": "package-kubesec",
-          "name": "Kubesec"
-        },
-        {
           "id": "package-outline",
           "name": "Outline"
         }
       ]
     },
     "menus": {
-      "view/title": [
+      "view/title": [        
         {
-          "command": "gates.activate-all",
+          "command": "gates.refreshEntry",
           "group": "navigation"
+          
         },
         {
-          "command": "gates.errors"
-        },
-        {
-          "command": "gates.warnings"
+          "command": "gates.activate",
+          "group": "navigation"
         }
       ],
-      "view/item/context": [
+      "view/item/context": [  
         {
-          "command": "gate.activate",
+          "command": "kubesec.activate",
+          "when": "view==package-gates&&viewItem==kubesec&& !kubesecActive",
+          "group": "inline"
+        }, 
+        {
+          "command": "kubesec.deactivate",
+          "when": "view==package-gates&&viewItem==kubesec&& kubesecActive",
           "group": "inline"
         },
         {
-          "command": "gate.errors"
-        },
-        {
-          "command": "gate.warnings"
-        },
-        {
-          "command": "kubesec.showData",
-          "group": "inline"
+          "command": "kubesec.showData"
         }
       ]
     }

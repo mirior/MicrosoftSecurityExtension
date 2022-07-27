@@ -16,14 +16,14 @@ spec:
       containers:
       - name: payment
         image: nginx
-        resources: 
-          limits: 
-            cpu: 200            
+        # resources: 
+        #   limits: 
+        #     cpu: 200            
         securityContext:
           capabilities:
             drop:
               - all
             add:
-              - NET_BIND_SERVICE‏
+              - NET_BIND_SERVICE
 
 #containers[] .resources .limits .cpu
