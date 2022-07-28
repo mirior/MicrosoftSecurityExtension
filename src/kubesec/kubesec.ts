@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 const axios = require('axios');
-import { getVSCodeDownloadUrl } from '@vscode/test-electron/out/util';
+//import { getVSCodeDownloadUrl } from '@vscode/test-electron/out/util';
 //const fs = require('fs');
 import { readFileSync } from 'fs';
 import { getAllFilesSync } from 'get-all-files';
-import { TextDocument, workspace } from 'vscode';
+//import { TextDocument, workspace } from 'vscode';
 const fileType='.yaml';
 
 export async function kubesec(){    

@@ -17,7 +17,7 @@
     "commands": [
       {
         "command": "gates.refreshEntry",
-        "title": "kubesec.refreshEntry",
+        "title": "gates.refreshEntry",
         "icon":"$(refresh)"
         
       },

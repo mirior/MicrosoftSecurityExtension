@@ -16,9 +16,9 @@ spec:
       containers:
       - name: payment
         image: nginx
-        # resources: 
-        #   limits: 
-        #     cpu: 200            
+        resources: 
+          limits: 
+            cpu: 200            
         securityContext:
           capabilities:
             drop:
