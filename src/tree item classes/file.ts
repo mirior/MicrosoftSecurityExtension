@@ -4,6 +4,8 @@ import { ScoringItem } from './scoring';
 import { TreeItem } from './tree-item';
 
 export class File extends TreeItem {
+  private scoring: [] = this.scoringRes;
+
   constructor(
     public readonly path: string,
     public readonly fileName: string,
@@ -15,31 +17,17 @@ export class File extends TreeItem {
       "title": "",
       "command": "kubesec.showData",
       arguments: [path],
-      tooltip: ' '
+      //tooltip: ' '
     };
     super(fileName, collapsibleState);
     this.command = command;
-
   }
-  public scoring: [] = this.scoringRes;
 
-  // async getYamlFiles(label: string) {
-  //   let files = (await kubesec());
-  //   switch (label) {
-  //     case 'Critical': files = files.filter((element) => { return element.kubesecResult[0].scoring?.critical?.length > 0; }); break;
-  //     case 'Passed': files = files.filter((element) => { return element.kubesecResult[0].scoring?.passed?.length > 0; }); break;
-  //     case 'Advise': files = files.filter((element) => { return element.kubesecResult[0].scoring?.advise?.length > 0; });
-  //   }
-  //   return files.map(function (obj) {
-  //     return new File(obj.filePath, obj.filePath.slice(obj.filePath.lastIndexOf('\\') + 1), vscode.TreeItemCollapsibleState.None,
-  //       obj.kubesecResult[0]);
-  //   });
-  // }
 
   public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
-    let cmd=this.command;
+    let cmdOpenFile = this.command;
     return Promise.resolve(this.scoring.map(function (obj) {
-      return new ScoringItem(obj['id'], obj['selector'], obj['reason'],cmd);
+      return new ScoringItem(obj['id'], obj['selector'], obj['reason'], cmdOpenFile);
     }));
   }
 };

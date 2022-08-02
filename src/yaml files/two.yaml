@@ -1,9 +1,23 @@
-name: John Smith
-bill-to:  &id01
-  street: |
-          123 Tornado Alley
-          Suite 16          
-  city:   East Centerville
-  state:  KS
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: payment
+        image: nginx
+        securityContext:
+          capabilities:
+            add:
+              - SYS_ADMIN
 
-ship-to:  *id01

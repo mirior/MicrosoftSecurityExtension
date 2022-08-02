@@ -14,12 +14,76 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": [
+      
+			{
+				"id": "widgetSamples",
+				"title": "Settings Editor Widget Samples",
+				"order": 2,
+				"properties": {
+          "activity.settings1": {
+						"type": "object",
+						"order": 2,
+						"description": "An example numeric object setting.",
+						"properties": {
+              "type": "object",
+              "properties": {
+							"gate": {
+								"type": "string",
+								"description": "gate name"
+							},
+							"active": {
+								"type": "boolean",
+								"description": "activity state"
+							}
+						}},
+						"additionalProperties": false
+					}
+				}
+			},
+			{
+				"id": "configurationSamples",
+				"title": "Configuration Sample",
+				"properties": {		
+          "conf.view.showOnWindowOpen": {
+						"type": "array",
+						"enum": [
+							"explorer",
+							"search",
+							"scm",
+							"debug",
+							"extensions"
+						],
+						"default": "explorer",
+						"description": "Window configuration: View to show always when a window opens",
+						"scope": "window"
+					},			
+					"activity.settings": {
+						"type": "object",
+						"default": {},
+						"description": "Resource configuration: Configure files using glob patterns to have an empty last line always",
+						"scope": "window"
+					},
+          "try": {
+						"type": "object",
+						"default": {},
+						"description": "Resource configuration: Configure files using glob patterns to have an empty last line always",
+						"scope": "window"
+					},			
+					"activity.settings.array": {
+						"type": "array",
+						"default": [],
+						"description": "Resource configuration: Configure files using glob patterns to have an empty last line always",
+						"scope": "window"
+					}
+				}
+			}
+		],         
     "commands": [
       {
         "command": "gates.refreshEntry",
         "title": "gates.refreshEntry",
-        "icon":"$(refresh)"
-        
+        "icon": "$(refresh)"
       },
       {
         "command": "kubesec.activate",
@@ -34,8 +98,7 @@
       {
         "command": "gates.activate",
         "title": "gates.activate"
-        
-      },      
+      },
       {
         "command": "microsoft-security-gate.gates",
         "title": "Microsoft Security Gate"
@@ -49,7 +112,7 @@
         "command": "gates.activate",
         "title": "Activate all",
         "icon": "$(check-all)"
-      },      
+      },
       {
         "command": "kubesec.showData",
         "title": "kubesec.showData"
@@ -77,23 +140,22 @@
       ]
     },
     "menus": {
-      "view/title": [        
+      "view/title": [
         {
           "command": "gates.refreshEntry",
           "group": "navigation"
-          
         },
         {
           "command": "gates.activate",
           "group": "navigation"
         }
       ],
-      "view/item/context": [  
+      "view/item/context": [
         {
           "command": "kubesec.activate",
           "when": "view==package-gates&&viewItem==kubesec&& !kubesecActive",
           "group": "inline"
-        }, 
+        },
         {
           "command": "kubesec.deactivate",
           "when": "view==package-gates&&viewItem==kubesec&& kubesecActive",
