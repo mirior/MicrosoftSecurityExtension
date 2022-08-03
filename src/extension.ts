@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 const fs = require('fs');
-import { GatesProvider } from './gate-provider';
+import { GatesProvider } from './gate provider/gate-provider';
 import path = require('path');
-import { Gate } from './tree item models/gate';
+import { Gate } from './gate provider/gates/gate';
 
 export async function activate(context: vscode.ExtensionContext) {
 
