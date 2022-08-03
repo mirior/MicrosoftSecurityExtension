@@ -17,7 +17,6 @@ export class File extends TreeItem {
       "title": "",
       "command": "kubesec.showData",
       arguments: [path],
-      //tooltip: ' '
     };
     super(fileName, collapsibleState);
     this.command = command;

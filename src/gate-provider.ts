@@ -1,14 +1,9 @@
 import path = require('path');
 import * as vscode from 'vscode';
 import { KubesecGate } from './kubesec/kubesec-gate';
-import { Gate } from './tree item classes/gate';
-import { TreeItem } from './tree item classes/tree-item';
-const { readFileSync } = require('fs');
+import { Gate } from './tree item models/gate';
+import { TreeItem } from './tree item models/tree-item';
 
-// const reg = new FinalizationRegistry((testament: TestTestament) => {
-//   console.log(`Test #${testament.id} has been garbage collected`);
-//   clearInterval(testament.intervalid);
-// });
 
 export class GatesProvider implements vscode.TreeDataProvider<TreeItem> {
   public gates: Gate[];
@@ -18,18 +13,13 @@ export class GatesProvider implements vscode.TreeDataProvider<TreeItem> {
  
 
   constructor() {
+    const configuredView =vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings');
+		const gates_activity_settings:any = Object.assign({}, configuredView);
 
-    const path = "C:\\Users\\This_user\\Documents\\microsoft-security-gate\\.vscode\\activity-settings.json";
-    
-
-    //const path = "../.vscode/activity-settings.json";
-    const data = readFileSync(path);
-    const activationData=JSON.parse(data);
-
-    this.gates = [new KubesecGate(activationData.Kubesec),
-    new Gate("Gate2", vscode.TreeItemCollapsibleState.None, '',activationData.Gate2),
-    new Gate("Gate3", vscode.TreeItemCollapsibleState.None, '',activationData.gate3),
-    new Gate("Gate4", vscode.TreeItemCollapsibleState.None, '',activationData.Gate4)];    
+    this.gates = [new KubesecGate(gates_activity_settings["Kubesec"]),
+    new Gate("Gate2", vscode.TreeItemCollapsibleState.Collapsed,'',gates_activity_settings["Kubesec"]),
+    new Gate("Gate3", vscode.TreeItemCollapsibleState.None,'',gates_activity_settings["Kubesec"]),
+    new Gate("Gate4", vscode.TreeItemCollapsibleState.None,'',gates_activity_settings["Kubesec"])];    
   }
 
   getTreeItem(element: Gate): vscode.TreeItem {
@@ -47,7 +37,9 @@ export class GatesProvider implements vscode.TreeDataProvider<TreeItem> {
     this.refresh();
   }
 
-  refresh(): void {
+  refresh(treeItem?:TreeItem): void {
+    treeItem?
+    this._onDidChangeTreeData.fire(treeItem):
     this._onDidChangeTreeData.fire();
   }
 
