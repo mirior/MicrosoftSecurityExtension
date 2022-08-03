@@ -10,16 +10,11 @@ export class GatesProvider implements vscode.TreeDataProvider<TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined | null | void> = new vscode.EventEmitter<TreeItem | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<TreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
- 
-
   constructor() {
-    const configuredView =vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings');
-		const gates_activity_settings:any = Object.assign({}, configuredView);
+    const configuredView = vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings');
+    const gates_activity_settings: any = Object.assign({}, configuredView);
 
-    this.gates = [new KubesecGate(gates_activity_settings["Kubesec"]),
-    new Gate("Gate2", vscode.TreeItemCollapsibleState.Collapsed,'',gates_activity_settings["Kubesec"]),
-    new Gate("Gate3", vscode.TreeItemCollapsibleState.None,'',gates_activity_settings["Kubesec"]),
-    new Gate("Gate4", vscode.TreeItemCollapsibleState.None,'',gates_activity_settings["Kubesec"])];    
+    this.gates = [new KubesecGate(gates_activity_settings["Kubesec"])];
   }
 
   getTreeItem(element: Gate): vscode.TreeItem {
@@ -33,15 +28,15 @@ export class GatesProvider implements vscode.TreeDataProvider<TreeItem> {
   }
 
   activeAllGates() {
-    this.gates.forEach((gate) => { return gate.setIsActive(true); });
+    this.gates.forEach((gate) => { return gate.activate(); });
     this.refresh();
   }
 
-  refresh(treeItem?:TreeItem): void {
-    treeItem?
-    this._onDidChangeTreeData.fire(treeItem):
-    this._onDidChangeTreeData.fire();
+  refresh(treeItem?: TreeItem): void {
+    treeItem ?
+      this._onDidChangeTreeData.fire(treeItem) :
+      this._onDidChangeTreeData.fire();
   }
 
-  
+
 }

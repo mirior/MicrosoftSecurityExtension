@@ -15,7 +15,7 @@ export class KubesecGate extends Gate {
   constructor(public isActive: boolean) {
     super("Kubesec", vscode.TreeItemCollapsibleState.Collapsed, 'kubesec', isActive);
     this.listenerSaveEvent();
-    
+
   }
 
   getTreeItem(element: File): vscode.TreeItem {
@@ -26,14 +26,14 @@ export class KubesecGate extends Gate {
   public async getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Promise<TreeItem[]> {
     this.myProvider = <GatesProvider>element;
     if (this.getIsActive() === true) {
-      this.data.length===0?this.data = await kubesec():this.data;        
-        let criticalData = this.data.filter((element) => { return element.kubesecResult[0].scoring?.critical?.length > 0; });
-        let passedData = this.data.filter((element) => { return element.kubesecResult[0].scoring?.passed?.length > 0; });
-        let adviseData = this.data.filter((element) => { return element.kubesecResult[0].scoring?.advise?.length > 0; });
-        return Promise.resolve([new Category("Critical", vscode.TreeItemCollapsibleState.Collapsed, criticalData),
-        new Category("Passed", vscode.TreeItemCollapsibleState.Collapsed, passedData),
-        new Category("Advise", vscode.TreeItemCollapsibleState.Collapsed, adviseData)]);
-      
+      this.data.length === 0 ? this.data = await kubesec() : this.data;
+      let criticalData = this.data.filter((element) => { return element.kubesecResult[0].scoring?.critical?.length > 0; });
+      let passedData = this.data.filter((element) => { return element.kubesecResult[0].scoring?.passed?.length > 0; });
+      let adviseData = this.data.filter((element) => { return element.kubesecResult[0].scoring?.advise?.length > 0; });
+      return Promise.resolve([new Category("Critical", vscode.TreeItemCollapsibleState.Collapsed, criticalData),
+      new Category("Passed", vscode.TreeItemCollapsibleState.Collapsed, passedData),
+      new Category("Advise", vscode.TreeItemCollapsibleState.Collapsed, adviseData)]);
+
     }
     else {
       return Promise.resolve([]);
@@ -45,14 +45,6 @@ export class KubesecGate extends Gate {
 
     if (changeFiles) {
       this.data = this.data.filter(elem => !changeFiles?.includes(elem.filePath));
-
-      // this.data = this.data.filter((element) => {
-      //   let arr = changeFiles;
-      //   arr = arr.filter(file => {
-      //     return file.slice(file.indexOf(':')) === element.filePath.slice(file.indexOf(':'));
-      //   });
-      //   return arr.length === 0;
-      // });
       for (const file of changeFiles) {
         this.data.push(
           {
@@ -67,10 +59,7 @@ export class KubesecGate extends Gate {
 
   public async activate() {
     super.activate();
-    // kubesec().then(data => this.data = data).then(() => {
-    //   this.myProvider?.refresh(this);
-    // });
-    this.data=[];
+    this.data = [];
     this.myProvider?.refresh(this);
   }
 
@@ -83,7 +72,7 @@ export class KubesecGate extends Gate {
     let arrResult: string[] = [];
     workspace.onDidSaveTextDocument((document: TextDocument) => {
       arrResult = [];
-      document.languageId === "yaml" && document.uri.scheme === "file" ?
+      document.uri.scheme === "file" && document.languageId === "yaml" ?
         arrResult.push(document.fileName) :
         arrResult;
 

@@ -50,8 +50,8 @@
         "icon": "$(check-all)"
       },
       {
-        "command": "kubesec.showData",
-        "title": "kubesec.showData"
+        "command": "showTextDocument",
+        "title": "showTextDocument"
       }
     ],
     "viewsContainers": {
@@ -98,7 +98,7 @@
           "group": "inline"
         },
         {
-          "command": "kubesec.showData"
+          "command": "showTextDocument"
         }
       ]
     }

@@ -17,7 +17,7 @@ export async function kubesec() {
                 'filePath': file,
                 'kubesecResult': await sendFileToKubesec(file)
             });
-            writeKubesecResultsToOutput(kubesecResults, MDCOutputChannel);
+        writeKubesecResultsToOutput(kubesecResults, MDCOutputChannel);
 
     }
 
@@ -31,7 +31,7 @@ export function writeKubesecResultsToOutput(_kubesecResults: any[], MDCOutputCha
     const advise = currentKubesecResult.scoring.advise;
     const passed = currentKubesecResult.scoring.passed;
     const critical = currentKubesecResult.scoring.critical;
-    let scoringResult = ""; 
+    let scoringResult = "";
     if (scoring != {}) {
         scoringResult = scoringResult.concat('scoring:');
         if (advise) {
@@ -69,7 +69,6 @@ function appendLineToOutputChannel(outputChannel: vscode.OutputChannel, message:
 
 
 async function getFiles() {
-    //const path=vscode.workspace.workspaceFolders![0].uri.fsPath; 
     let myPath = vscode.workspace.workspaceFolders?.map(elem => elem.uri.fsPath);
     myPath === undefined ? myPath = [] : null;
     let files = [];
