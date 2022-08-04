@@ -7,7 +7,6 @@ import { fileKubesecResultToOutputChannel } from '../../output-channel';
 const fileType = '.yaml';
 
 export async function kubesec() {
-
     const files = await getFiles();
     return await sendFilesToKubesec(files);
 }
