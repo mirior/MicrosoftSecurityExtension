@@ -14,6 +14,32 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "languages": [
+      {
+          "id": "Log",
+          "aliases": [
+              "log"
+          ],
+          "extensions": [
+              ".log"
+          ],
+          "configuration": "./log.configuration.json",
+          "mimetypes": [
+              "log",
+              "text/log",
+              "text/x-log",
+              "text/x-code-output",
+              "x-code-output"
+          ]
+      }
+  ],
+  "grammars": [
+      {
+          "language": "Log",
+          "scopeName": "code.log",
+          "path": "./src/syntaxes/log.tmLanguage"
+      }
+  ],
     "configuration": [
 			{
 				"id": "configurationSamples",

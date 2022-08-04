@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-const outputChannelName="MDC-Microsoft Security Gate";
+import { CategoryType } from './gates/kubesec/category';
+const outputChannelName = "MDC-Microsoft Security Gate";
 
 const MDCOutputChannel = vscode.window.createOutputChannel(outputChannelName);
 
@@ -7,36 +8,27 @@ export function appendLineToOutputChannel(message: string) {
     MDCOutputChannel.appendLine(message);
 }
 
-export function writeKubesecResultsToOutput(_kubesecResults: any[], MDCOutputChannel: vscode.OutputChannel) {
-    const currentKubesecResult = _kubesecResults[_kubesecResults.length - 1].kubesecResult[0];
-    const message = "message:" + currentKubesecResult.message + ',\n';
-    const scoring = currentKubesecResult.scoring;
-    const advise = currentKubesecResult.scoring.advise;
-    const passed = currentKubesecResult.scoring.passed;
-    const critical = currentKubesecResult.scoring.critical;
-    let scoringResult = "";
-    if (scoring != {}) {
-        scoringResult = scoringResult.concat('scoring:');
-        if (advise) {
-            scoringResult = scoringResult.concat("advise-");
-            advise.forEach((adv: any) => {
-                scoringResult = scoringResult.concat("reason:" + adv.reason + ',\n' + "selector:" + adv.selector + ',\n');
-            });
-        }
-        if (passed) {
-            scoringResult = scoringResult.concat("passed-");
-            passed.forEach((pass: any) => {
-                scoringResult = scoringResult.concat("reason:" + pass.reason + ',\n' + "selector:" + pass.selector + ',\n');
-            });
-        }
-        if (critical) {
-            scoringResult = scoringResult.concat("critical-");
-            critical.forEach((criti: any) => {
-                scoringResult = scoringResult.concat("reason:" + criti.reason + ',\n' + "selector:" + criti.selector + ',\n');
-            });
-        }
+export function fileKubesecResultToOutputChannel(file: string, kubesecResult: any[]) {
+    appendLineToOutputChannel(file);
+    const critical: [] | undefined = kubesecResult[0].scoring?.critical;
+    const passed: [] | undefined = kubesecResult[0].scoring?.passed;
+    const advise: [] | undefined = kubesecResult[0].scoring?.advise;
+    critical ? critical.forEach(elem => scoringToToOutputChannel(CategoryType.Critical, elem)) : null;
+    passed ? passed.forEach(elem => scoringToToOutputChannel(CategoryType.Passed, elem)) : null;
+    advise ? advise.forEach(elem => scoringToToOutputChannel(CategoryType.Advise, elem)) : null;
+}
+
+
+function scoringToToOutputChannel(category: CategoryType, data: any) {
+    const critical = "✘", passed = "✔", advise = "->";
+    switch (category) {
+        case CategoryType.Critical:
+            appendLineToOutputChannel(critical + JSON.stringify(data)); break;
+        case CategoryType.Passed:
+            appendLineToOutputChannel(passed + JSON.stringify(data)); break;
+        case CategoryType.Advise:
+            appendLineToOutputChannel(advise + JSON.stringify(data));
     }
-    appendLineToOutputChannel("kubesec result:\n" + message + scoringResult);
 }
 
 

@@ -2,8 +2,7 @@ import * as vscode from 'vscode';
 const axios = require('axios');
 import { readFileSync } from 'fs';
 import { getAllFilesSync } from 'get-all-files';
-import { appendLineToOutputChannel } from '../../output-channel';
-import { CategoryType } from './category';
+import { fileKubesecResultToOutputChannel } from '../../output-channel';
 
 const fileType = '.yaml';
 
@@ -28,20 +27,6 @@ async function getFiles() {
     return files;
 }
 
-function fileKubesecResultToOutputChannel(file:string,kubesecResult:any){
-    appendLineToOutputChannel(file + ':\n');
-    const advise = JSON.stringify(kubesecResult[0].scoring?.advise);
-    const passed = JSON.stringify(kubesecResult[0].scoring?.passed);
-    const critical = JSON.stringify(kubesecResult[0].scoring?.critical);
-    advise?appendLineToOutputChannel("advise: \n" + advise + ':\n'):null;
-    passed?appendLineToOutputChannel("passed: \n" + passed + ':\n'):null;
-    critical?appendLineToOutputChannel("advise: \n" + critical + ':\n'):null;
-}
-
-function kubesecScoringToOutputChannel(category:CategoryType,data:any){
-    
-
-}
 
 
 async function sendFileToKubesec(filePath: string) {
@@ -55,7 +40,7 @@ async function sendFileToKubesec(filePath: string) {
             "Content-Type": `text/yaml`
         }
     });
-    fileKubesecResultToOutputChannel(filePath,response.data);
+    fileKubesecResultToOutputChannel(filePath, response.data);
     return response.data;
 }
 

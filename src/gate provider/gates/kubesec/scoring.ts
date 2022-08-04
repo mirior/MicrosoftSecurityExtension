@@ -10,6 +10,6 @@ export class ScoringItem extends TreeItem {
 
   ) {
     super(reason, vscode.TreeItemCollapsibleState.None);
-    this.command=command;
+    this.command = command;
   }
 };

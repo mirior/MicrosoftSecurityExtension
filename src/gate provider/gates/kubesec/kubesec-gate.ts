@@ -5,9 +5,9 @@ import { TreeItem } from '../../tree-item';
 import { Gate } from '../gate';
 import { Category } from './category';
 import { File } from './file';
-import { kubesec, sendFilesToKubesec} from './kubesec';
+import { kubesec, sendFilesToKubesec } from './kubesec';
 
-const documentType="yaml";
+const documentType = "yaml";
 export class KubesecGate extends Gate {
 
   public myProvider: GatesProvider | undefined;
@@ -46,8 +46,8 @@ export class KubesecGate extends Gate {
 
     if (changeFiles) {
       this.data = this.data.filter(elem => !changeFiles?.includes(elem.filePath));
-      const newData=await sendFilesToKubesec(changeFiles);
-      for(const newFile of newData){
+      const newData = await sendFilesToKubesec(changeFiles);
+      for (const newFile of newData) {
         this.data.push(newFile);
       }
       this.myProvider?.refresh(this);
@@ -70,7 +70,7 @@ export class KubesecGate extends Gate {
     let arrResult: string[] = [];
     workspace.onDidSaveTextDocument((document: TextDocument) => {
       arrResult = [];
-      document.uri.scheme === "file" && document.languageId === documentType?
+      document.uri.scheme === "file" && document.languageId === documentType ?
         arrResult.push(document.fileName) :
         arrResult;
 
