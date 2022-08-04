@@ -19,7 +19,7 @@ export class Category extends TreeItem {
     this.files = data;
   }
 
-  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
+  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined):any {
     return Promise.resolve(this.getYamlFiles(this.label));
   }
 
