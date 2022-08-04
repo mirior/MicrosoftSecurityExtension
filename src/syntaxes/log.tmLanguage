@@ -32,7 +32,8 @@
                 <string>->\S+"(.*?)"\S+"reason"\S+"(.*?)"\S+</string>
                 <key>name</key>
                 <string>support.class</string>
-            </dict>            
+            </dict>  
+                           
         </array>
         <key>uuid</key>
         <string>ab259404-3072-4cd4-a943-7cbbd32e373f</string>

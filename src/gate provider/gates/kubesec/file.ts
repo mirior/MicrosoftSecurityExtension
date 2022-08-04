@@ -24,9 +24,9 @@ export class File extends TreeItem {
 
 
   public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
-    let cmdOpenFile = this.command;
+    let filePath = this.path;
     return Promise.resolve(this.scoring.map(function (obj) {
-      return new ScoringItem(obj['id'], obj['selector'], obj['reason'], cmdOpenFile);
+      return new ScoringItem(obj['id'], obj['selector'], obj['reason'], filePath);
     }));
   }
 };

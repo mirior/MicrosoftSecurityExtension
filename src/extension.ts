@@ -3,6 +3,7 @@ const fs = require('fs');
 import { GatesProvider } from './gate provider/gate-provider';
 import path = require('path');
 import { Gate } from './gate provider/gates/gate';
+import { ScoringItem } from './gate provider/gates/kubesec/scoring';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -32,6 +33,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('showTextDocument', async (arg: any) => {
 		const filePath = arg.toString();
 		const textDocument = await vscode.workspace.openTextDocument(filePath);
+		await vscode.window.showTextDocument(textDocument);
+	});
+
+	vscode.commands.registerCommand('kubesec.showScoring', async (arg: ScoringItem) => {
+		const textDocument = await vscode.workspace.openTextDocument(arg.filePath);
 		await vscode.window.showTextDocument(textDocument);
 	});
 }

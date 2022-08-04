@@ -14,25 +14,6 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "languages": [
-      {
-          "id": "Log",
-          "aliases": [
-              "log"
-          ],
-          "extensions": [
-              ".log"
-          ],
-          "configuration": "./log.configuration.json",
-          "mimetypes": [
-              "log",
-              "text/log",
-              "text/x-log",
-              "text/x-code-output",
-              "x-code-output"
-          ]
-      }
-  ],
   "grammars": [
       {
           "language": "Log",
@@ -78,6 +59,10 @@
       {
         "command": "showTextDocument",
         "title": "showTextDocument"
+      },
+      {
+        "command": "kubesec.showScoring",
+        "title": "kubesec.showScoring"
       }
     ],
     "viewsContainers": {
@@ -120,11 +105,24 @@
         },
         {
           "command": "gate.deactivate",
+          "when": "view==package-gates&&viewItem==templateAnalyzer&& templateAnalyzerActive",
+          "group": "inline"
+        },
+        {
+          "command": "gate.activate",
+          "when": "view==package-gates&&viewItem==templateAnalyzer&& !templateAnalyzerActive",
+          "group": "inline"
+        },
+        {
+          "command": "gate.deactivate",
           "when": "view==package-gates&&viewItem==kubesec&& kubesecActive",
           "group": "inline"
         },
         {
           "command": "showTextDocument"
+        },
+        {
+          "command": "kubesec.showScoring"
         }
       ]
     }

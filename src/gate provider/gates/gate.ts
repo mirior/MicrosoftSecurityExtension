@@ -24,11 +24,12 @@ export class Gate extends TreeItem {
     this._isActive = value;
     vscode.commands.executeCommand('setContext', this.context + 'Active', value);
     const settings = vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings', {});
-    const newSetting = { ...settings, ...{ [this.label]: value } };
+    const newSetting = { ...settings, ...{ [this.context]: value } };
     await vscode.workspace.getConfiguration().update('microsoft.security.gate.gates.activity.settings', newSetting, vscode.ConfigurationTarget.Global);
   }
 
   public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
+    !this._isActive?vscode.window.showInformationMessage("In order to use the gate you must activate it"):null;
     return Promise.resolve([]);
   }
 

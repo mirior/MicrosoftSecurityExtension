@@ -19,7 +19,7 @@ export class KubesecGate extends Gate {
 
   }
 
-  getTreeItem(element: File): vscode.TreeItem {
+  getTreeItem(element: TreeItem): vscode.TreeItem {
     return element;
   }
 
