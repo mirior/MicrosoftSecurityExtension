@@ -2,69 +2,15 @@ import * as vscode from 'vscode';
 const axios = require('axios');
 import { readFileSync } from 'fs';
 import { getAllFilesSync } from 'get-all-files';
+import { appendLineToOutputChannel } from '../../output-channel';
+import { CategoryType } from './category';
 
 const fileType = '.yaml';
+
 export async function kubesec() {
 
-    const MDCOutputChannel = createOutputChannel("MDC-Microsoft Security Gate");
     const files = await getFiles();
-    appendLineToOutputChannel(MDCOutputChannel, "get all files");
-
-    var kubesecResults = [];
-    for (const file of files) {
-        kubesecResults.push(
-            {
-                'filePath': file,
-                'kubesecResult': await sendFileToKubesec(file)
-            });
-        writeKubesecResultsToOutput(kubesecResults, MDCOutputChannel);
-
-    }
-
-    return kubesecResults;
-}
-
-export function writeKubesecResultsToOutput(_kubesecResults: any[], MDCOutputChannel: vscode.OutputChannel) {
-    const currentKubesecResult = _kubesecResults[_kubesecResults.length - 1].kubesecResult[0];
-    const message = "message:" + currentKubesecResult.message + ',\n';
-    const scoring = currentKubesecResult.scoring;
-    const advise = currentKubesecResult.scoring.advise;
-    const passed = currentKubesecResult.scoring.passed;
-    const critical = currentKubesecResult.scoring.critical;
-    let scoringResult = "";
-    if (scoring != {}) {
-        scoringResult = scoringResult.concat('scoring:');
-        if (advise) {
-            scoringResult = scoringResult.concat("advise-");
-            advise.forEach((adv: any) => {
-                scoringResult = scoringResult.concat("reason:" + adv.reason + ',\n' + "selector:" + adv.selector + ',\n');
-            });
-        }
-        if (passed) {
-            scoringResult = scoringResult.concat("passed-");
-            passed.forEach((pass: any) => {
-                scoringResult = scoringResult.concat("reason:" + pass.reason + ',\n' + "selector:" + pass.selector + ',\n');
-            });
-        }
-        if (critical) {
-            scoringResult = scoringResult.concat("critical-");
-            critical.forEach((criti: any) => {
-                scoringResult = scoringResult.concat("reason:" + criti.reason + ',\n' + "selector:" + criti.selector + ',\n');
-            });
-        }
-    }
-    appendLineToOutputChannel(MDCOutputChannel, "kubesec result:\n" + message + scoringResult);
-}
-
-
-
-function createOutputChannel(outputChannelName: string) {
-    //Create output channel
-    let outputChannel = vscode.window.createOutputChannel(outputChannelName);
-    return outputChannel;
-}
-function appendLineToOutputChannel(outputChannel: vscode.OutputChannel, message: string) {
-    outputChannel.appendLine(message);
+    return await sendFilesToKubesec(files);
 }
 
 
@@ -82,7 +28,23 @@ async function getFiles() {
     return files;
 }
 
-export async function sendFileToKubesec(filePath: string) {
+function fileKubesecResultToOutputChannel(file:string,kubesecResult:any){
+    appendLineToOutputChannel(file + ':\n');
+    const advise = JSON.stringify(kubesecResult[0].scoring?.advise);
+    const passed = JSON.stringify(kubesecResult[0].scoring?.passed);
+    const critical = JSON.stringify(kubesecResult[0].scoring?.critical);
+    advise?appendLineToOutputChannel("advise: \n" + advise + ':\n'):null;
+    passed?appendLineToOutputChannel("passed: \n" + passed + ':\n'):null;
+    critical?appendLineToOutputChannel("advise: \n" + critical + ':\n'):null;
+}
+
+function kubesecScoringToOutputChannel(category:CategoryType,data:any){
+    
+
+}
+
+
+async function sendFileToKubesec(filePath: string) {
     const file = readFileSync(filePath, 'utf-8');
     const response = await axios({
         method: "post",
@@ -93,7 +55,23 @@ export async function sendFileToKubesec(filePath: string) {
             "Content-Type": `text/yaml`
         }
     });
+    fileKubesecResultToOutputChannel(filePath,response.data);
     return response.data;
+}
+
+
+
+
+export async function sendFilesToKubesec(files: string[]) {
+    let kubesecResults = [];
+    for (const file of files) {
+        kubesecResults.push(
+            {
+                'filePath': file,
+                'kubesecResult': await sendFileToKubesec(file)
+            });
+    }
+    return kubesecResults;
 }
 
 

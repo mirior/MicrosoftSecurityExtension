@@ -2,6 +2,11 @@ import * as vscode from 'vscode';
 import { TreeItem } from '../../tree-item';
 import { File } from './file';
 
+export enum CategoryType {
+  Critical,
+  Passed,
+  Advise
+}
 export class Category extends TreeItem {
   public files: { filePath: string; kubesecResult: any; }[] = [];
 

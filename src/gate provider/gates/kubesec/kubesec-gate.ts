@@ -1,12 +1,13 @@
 import * as vscode from 'vscode';
 import { TextDocument, Uri, workspace } from 'vscode';
 import { GatesProvider } from '../../gate-provider';
+import { TreeItem } from '../../tree-item';
+import { Gate } from '../gate';
 import { Category } from './category';
 import { File } from './file';
-import { Gate } from '../gate';
-import { TreeItem } from '../../tree-item';
-import { kubesec, sendFileToKubesec } from './kubesec';
+import { kubesec, sendFilesToKubesec} from './kubesec';
 
+const documentType="yaml";
 export class KubesecGate extends Gate {
 
   public myProvider: GatesProvider | undefined;
@@ -15,7 +16,6 @@ export class KubesecGate extends Gate {
   constructor(public isActive: boolean) {
     super("Kubesec", vscode.TreeItemCollapsibleState.Collapsed, 'kubesec', isActive);
     this.listenerSaveEvent();
-    
 
   }
 
@@ -46,12 +46,9 @@ export class KubesecGate extends Gate {
 
     if (changeFiles) {
       this.data = this.data.filter(elem => !changeFiles?.includes(elem.filePath));
-      for (const file of changeFiles) {
-        this.data.push(
-          {
-            'filePath': file,
-            'kubesecResult': await sendFileToKubesec(file)
-          });
+      const newData=await sendFilesToKubesec(changeFiles);
+      for(const newFile of newData){
+        this.data.push(newFile);
       }
       this.myProvider?.refresh(this);
 
@@ -73,7 +70,7 @@ export class KubesecGate extends Gate {
     let arrResult: string[] = [];
     workspace.onDidSaveTextDocument((document: TextDocument) => {
       arrResult = [];
-      document.uri.scheme === "file" && document.languageId === "yaml" ?
+      document.uri.scheme === "file" && document.languageId === documentType?
         arrResult.push(document.fileName) :
         arrResult;
 

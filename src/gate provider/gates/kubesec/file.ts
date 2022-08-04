@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { kubesec } from './kubesec';
-import { ScoringItem } from './scoring';
 import { TreeItem } from '../../tree-item';
+import { kubesec } from '../kubesec/kubesec';
+import { ScoringItem } from './scoring';
 
 export class File extends TreeItem {
   private scoring: [] = this.scoringRes;

@@ -6,19 +6,19 @@ import { Gate } from './gate provider/gates/gate';
 
 export async function activate(context: vscode.ExtensionContext) {
 
-	var myGates = new GatesProvider();
+	let gates = new GatesProvider();
 
 	vscode.window.registerTreeDataProvider(
 		'package-gates',
-		myGates
+		gates
 	);
 
 	vscode.commands.registerCommand('gates.refreshEntry', () =>
-		myGates.refresh()
+		gates.refresh()
 	);
 
 	vscode.commands.registerCommand('gates.activate', () => {
-		myGates.activeAllGates();
+		gates.activeAllGates();
 	});
 
 	vscode.commands.registerCommand('gate.activate', async (arg: Gate) => {
@@ -31,7 +31,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.registerCommand('showTextDocument', async (arg: any) => {
 		const filePath = arg.toString();
-		let textDocument = await vscode.workspace.openTextDocument(filePath);
+		const textDocument = await vscode.workspace.openTextDocument(filePath);
 		await vscode.window.showTextDocument(textDocument);
 	});
 }
