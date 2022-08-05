@@ -13,20 +13,20 @@ export class File extends TreeItem {
     public scoringRes: [],
     public readonly command?: vscode.Command,
   ) {
+    super(fileName, collapsibleState);
     command = {
       "title": "",
-      "command": "showTextDocument",
-      arguments: [path],
+      "command": "kubesec.showTextDocument",
+      arguments: [this],
     };
-    super(fileName, collapsibleState);
     this.command = command;
   }
 
 
-  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): any {
-    let cmdOpenFile = this.command;
+  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined):any {
+    let filePath = this.path;
     return Promise.resolve(this.scoring.map(function (obj) {
-      return new ScoringItem(obj['id'], obj['selector'], obj['reason'], cmdOpenFile);
+      return new ScoringItem(obj['id'], obj['selector'], obj['reason'], filePath);
     }));
   }
 };

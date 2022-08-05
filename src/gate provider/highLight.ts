@@ -7,11 +7,11 @@ let sentenceDecorationType = vscode.window.createTextEditorDecorationType({
     overviewRulerLane: vscode.OverviewRulerLane.Right,
     light: {
         // this color will be used in light color themes
-        textDecoration:'underline black'
+        textDecoration:'underline red'
     },
     dark: {
         // this color will be used in dark color themes
-        textDecoration:'underline white'
+        textDecoration:'underline red'
     }
 });
   const text = vscode.window.activeTextEditor?.document.getText();

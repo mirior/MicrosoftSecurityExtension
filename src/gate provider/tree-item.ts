@@ -8,7 +8,7 @@ export class TreeItem extends vscode.TreeItem {
     super(label, collapsibleState);
   }
 
-  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
+  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): any {
     return Promise.resolve([]);
   }
 }

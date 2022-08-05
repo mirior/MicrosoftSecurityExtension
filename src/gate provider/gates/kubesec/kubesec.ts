@@ -9,6 +9,7 @@ const axios = require('axios');
 const fs = require('fs');
 
 const fileType = '.yaml';
+const kubesecSelectorInvalidCharcters = ['|', '==', '-'];
 
 export async function kubesec() {
     const files = await getFiles();
@@ -44,36 +45,42 @@ export function removeInvalidCharctersInSentence(searchSentence: string, invalid
 }
 
 
-
-
-async function arrangeKubesecFileBeforeSearch(fileToSearchInPath: string, searchSentence: string) {
+export async function readKubesecFileByLines(pathOfFileToSearchIn: string) {
     try {
-        const document = await fs.readFileSync(fileToSearchInPath, "utf8");
+        const document = await fs.readFileSync(pathOfFileToSearchIn, "utf8");
         const documentStringLines = document.trim().split('\n');
-        if (searchSentence[0] === '.') {
-            searchSentence = searchSentence.slice(1, searchSentence.length);
-        }
-
-        //Examples of kubesec results that need character removal before sending to search.
-        //To get a correct search result:
-        //".spec .serviceAccountName" 
-        //"containers[] .securityContext .capabilities .drop | index(\"ALL\")"
-        //"containers[] .securityContext .readOnlyRootFilesystem == true"
-        //"containers[] .securityContext .runAsUser -gt 10000"
-        searchSentence = removeInvalidCharctersInSentence(searchSentence, ['|', '==', '-']);
-        
-        let searchSentenceSplit = searchSentence.replaceAll(' ', '').split('.');
-        if (searchSentenceSplit[0].includes("containers[]")) {
-            searchSentenceSplit[0] = searchSentenceSplit[0].trim().slice(0, -2);
-        }
-        if (searchSentenceSplit[0].includes("metadata")) {
-            searchSentenceSplit = ["metadata"];
-        }
-        const itemsReadyToSearch={documentStringLines,searchSentenceSplit};
-        return itemsReadyToSearch;
-    } catch (Error) {
+        return documentStringLines;
+    }
+    catch (Error) {
         displayErrorMessage("There is no such file!");
     }
+}
+
+
+export function arrangeKubesecSelectorBeforeSearch(fileToSearchIn: any, searchSentence: string) {
+    if (searchSentence[0] === '.') {
+        //example:
+        //".spec .serviceAccountName" 
+        searchSentence = searchSentence.slice(1, searchSentence.length);
+    }
+
+    //Examples of kubesec results that need character removal before sending to search.
+    //To get a correct search result:
+    //"containers[] .securityContext .capabilities .drop | index(\"ALL\")"
+    //"containers[] .securityContext .readOnlyRootFilesystem == true"
+    //"containers[] .securityContext .runAsUser -gt 10000"
+    searchSentence = removeInvalidCharctersInSentence(searchSentence, kubesecSelectorInvalidCharcters);
+
+    let searchSentenceSplit = searchSentence.replaceAll(' ', '').split('.');
+
+    if (searchSentenceSplit[0].includes("containers[]")) {
+        searchSentenceSplit[0] = searchSentenceSplit[0].trim().slice(0, -2);
+    }
+    if (searchSentenceSplit[0].includes("metadata")) {
+        searchSentenceSplit = ["metadata"];
+    }
+    return searchSentenceSplit;
+
 }
 
 async function sendFileToKubesec(filePath: string) {
@@ -107,31 +114,27 @@ export async function sendFilesToKubesec(files: string[]) {
 }
 
 
-export async function showTextDocumentWithErrors(kubesecResult:any) 
-{
-    kubesecResult.forEach(async (res: any) => {
-        const searchSentence=res['selector'];
-        const readyToSearch = await arrangeKubesecFileBeforeSearch(kubesecResult.filePath, searchSentence);
-        const searchResult = hierarchySearchInFile(readyToSearch!.documentStringLines, readyToSearch!.searchSentenceSplit);
+export async function showTextDocumentWithErrors(kubesecResult: any, documentText: string[]) {
+
+    kubesecResult['scoring'].forEach(async (res: any) => {
+        const searchSentence = res['selector'];
+        const searchSentenceReadyToSearch = arrangeKubesecSelectorBeforeSearch(documentText, searchSentence);
+        const searchResult = hierarchySearchInFile(documentText, searchSentenceReadyToSearch);
         if (searchResult) {
             const requestedLine = searchResult.requestedLine;
             const numOfTabs = searchResult.numOfTabs;
             if (requestedLine === -1) {
                 displayErrorMessage(searchSentence + " not found!");
             }
-            else 
-            {
-                // if (requestedLine) {
-                    // jumpSpecifiedLine(requestedLine, KubesecResult.filePath);
-                    highLightTextInFile(requestedLine, numOfTabs);
-                // }
+            else {
+                highLightTextInFile(requestedLine, numOfTabs);
             }
         }
     });
 }
 
 
-function displayErrorMessage(message:string){
+function displayErrorMessage(message: string) {
     vscode.window.showErrorMessage(message);
 
 }
