@@ -28,7 +28,7 @@ export class Gate extends TreeItem {
     await vscode.workspace.getConfiguration().update('microsoft.security.gate.gates.activity.settings', newSetting, vscode.ConfigurationTarget.Global);
   }
 
-  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
+  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): any {
     return Promise.resolve([]);
   }
 

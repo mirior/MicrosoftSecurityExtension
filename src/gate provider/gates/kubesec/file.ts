@@ -23,7 +23,7 @@ export class File extends TreeItem {
   }
 
 
-  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
+  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): any {
     let cmdOpenFile = this.command;
     return Promise.resolve(this.scoring.map(function (obj) {
       return new ScoringItem(obj['id'], obj['selector'], obj['reason'], cmdOpenFile);
