@@ -24,7 +24,7 @@ export class GatesProvider implements vscode.TreeDataProvider<TreeItem> {
     return element;
   }
 
-  getChildren(element?: TreeItem | undefined): Thenable<TreeItem[]> {
+  getChildren(element?: TreeItem | undefined):any {
     return element === undefined ?
       Promise.resolve(this.gates) :
       element.getMoreChildren(this);

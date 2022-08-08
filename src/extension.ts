@@ -11,7 +11,7 @@ import { hierarchySearchInFile, jumpSpecifiedLine } from './gate provider/search
 export async function activate(context: vscode.ExtensionContext) {
 
 	let gates = new GatesProvider();
-	let activeDocumentText: string[];//correct?
+	let activeTextDocument: string[];//correct?
 
 	vscode.window.registerTreeDataProvider(
 		'package-gates',
@@ -34,19 +34,19 @@ export async function activate(context: vscode.ExtensionContext) {
 		arg.deactivate();
 	});
 
-	vscode.commands.registerCommand('kubesec.showTextDocument', async (arg: File) => {
+	vscode.commands.registerCommand('showTextDocument', async (arg: File) => {
 		const filePath = arg.path;
 		const textDocument = await vscode.workspace.openTextDocument(filePath);
 		await vscode.window.showTextDocument(textDocument);
-		activeDocumentText = await readKubesecFileByLines(arg.path);
-		await showTextDocumentWithErrors(arg, activeDocumentText);
+		activeTextDocument = await readKubesecFileByLines(arg.path);
+		await showTextDocumentWithErrors(arg, activeTextDocument);
 	});
 
 	vscode.commands.registerCommand('kubesec.showScoring', async (arg: ScoringItem) => {
 		const textDocument = await vscode.workspace.openTextDocument(arg.filePath);
 		await vscode.window.showTextDocument(textDocument);
-		const searchSentenceReadyToSearch = arrangeKubesecSelectorBeforeSearch(activeDocumentText, arg.selector);
-		const searchResult = hierarchySearchInFile(activeDocumentText, searchSentenceReadyToSearch);
+		const searchSentenceReadyToSearch = arrangeKubesecSelectorBeforeSearch(activeTextDocument, arg.selector);
+		const searchResult = hierarchySearchInFile(activeTextDocument, searchSentenceReadyToSearch);
 		jumpSpecifiedLine(searchResult.requestedLine, arg.filePath);
 
 	});
