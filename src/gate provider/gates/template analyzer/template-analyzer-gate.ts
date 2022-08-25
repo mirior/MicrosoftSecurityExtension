@@ -26,17 +26,17 @@ export class TemplateAnalyzerGate extends Gate {
     }
 
     public async refresh() {
-        this.myProvider?.refresh(this);
+        this.myProvider?.refresh();
     }
 
     public async activate() {
         super.activate();
-        this.myProvider?.refresh(this);
+        this.myProvider?.refresh();
     }
 
     public async deactivate() {
         super.deactivate();
-        this.myProvider?.refresh(this);
+        this.myProvider?.refresh();
     }
 
     public listenerSaveEvent() {

@@ -20,12 +20,22 @@ export class Gate extends TreeItem {
     return this._isActive;
   }
 
+  // public async setIsActive(value: boolean) {
+  //   this._isActive = value;
+  //   vscode.commands.executeCommand('setContext', this.context + 'Active', value);
+  //   const settings = vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings', {});
+  //   const newSetting = { ...settings, ...{ [this.context]: value } };
+  //   await vscode.workspace.getConfiguration().update('microsoft.security.gate.gates.activity.settings', newSetting, vscode.ConfigurationTarget.Global);
+  // }
+
   public async setIsActive(value: boolean) {
     this._isActive = value;
-    vscode.commands.executeCommand('setContext', this.context + 'Active', value);
-    const settings = vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings', {});
-    const newSetting = { ...settings, ...{ [this.context]: value } };
-    await vscode.workspace.getConfiguration().update('microsoft.security.gate.gates.activity.settings', newSetting, vscode.ConfigurationTarget.Global);
+    this.isActive? vscode.commands.executeCommand('setContext','anyGateActive', true) :
+    vscode.commands.executeCommand('setContext', 'gateActive', false);
+   // vscode.commands.executeCommand('setContext', this.context + 'Active', value);
+    const settings=vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings',{});
+	  const newSetting = { ...settings, ...{[this.label]:value} };
+		await vscode.workspace.getConfiguration().update('microsoft.security.gate.gates.activity.settings', newSetting, vscode.ConfigurationTarget.Global);
   }
 
   public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined):any {

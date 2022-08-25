@@ -14,27 +14,27 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-  "grammars": [
+    "grammars": [
       {
-          "language": "Log",
-          "scopeName": "code.log",
-          "path": "./src/syntaxes/log.tmLanguage"
+        "language": "Log",
+        "scopeName": "code.log",
+        "path": "./src/syntaxes/log.tmLanguage"
       }
-  ],
+    ],
     "configuration": [
-			{
-				"id": "configurationSamples",
-				"title": "Configuration Sample",
-				"properties": {	 
+      {
+        "id": "configurationSamples",
+        "title": "Configuration Sample",
+        "properties": {
           "microsoft.security.gate.gates.activity.settings": {
-						"type": "object",
-						"default": {},
-						"description": "activity settings for all MICROSOFT SECURITY GATE gates",
-						"scope": "window"
-					}
-				}
-			}
-		],         
+            "type": "object",
+            "default": {},
+            "description": "activity settings for all MICROSOFT SECURITY GATE gates",
+            "scope": "window"
+          }
+        }
+      }
+    ],
     "commands": [
       {
         "command": "gates.refreshEntry",
@@ -63,6 +63,20 @@
       {
         "command": "kubesec.showScoring",
         "title": "kubesec.showScoring"
+      },
+      {
+        "command": "customGate.activate",
+        "title": "customGate.activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "customGate.deactivate",
+        "title": "customGate.deactivate",
+        "icon": "$(close)"
+      },
+      {
+        "command": "customGate.showData",
+        "title": "customGate.showData"
       }
     ],
     "viewsContainers": {
@@ -101,6 +115,19 @@
         {
           "command": "gate.activate",
           "when": "view==package-gates&&viewItem==kubesec&& !kubesecActive",
+          "group": "inline"
+        },
+        {
+          "command": "customGate.activate",
+          "when": "view==package-gates&&viewItem==gate&&!gateActive",
+          "group": "inline"
+        },
+        {
+          "command": "customGate.showData"
+        },
+        {
+          "command": "customGate.deactivate",
+          "when": "view==package-gates&&viewItem==anyGate&&anyGateActive",
           "group": "inline"
         },
         {

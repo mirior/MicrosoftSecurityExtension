@@ -50,7 +50,7 @@ export class KubesecGate extends Gate {
       for (const newFile of newData) {
         this.data.push(newFile);
       }
-      this.myProvider?.refresh(this);
+      this.myProvider?.refresh();
 
     }
   }
@@ -58,12 +58,12 @@ export class KubesecGate extends Gate {
   public async activate() {
     super.activate();
     this.data = [];
-    this.myProvider?.refresh(this);
+    this.myProvider?.refresh();
   }
 
   public async deactivate() {
     super.deactivate();
-    this.myProvider?.refresh(this);
+    this.myProvider?.refresh();
   }
 
   public listenerSaveEvent() {

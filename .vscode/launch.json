@@ -15,7 +15,11 @@
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"
 			],
-			"preLaunchTask": "${defaultBuildTask}"
+			"preLaunchTask": "${defaultBuildTask}",
+			"localRoot": "${workspaceRoot}",
+			"remoteRoot": "${workspaceFolder}",
+			"sourceMaps": true
+
 		},
 		{
 			"name": "Extension Tests",
@@ -29,6 +33,13 @@
 				"${workspaceFolder}/out/test/**/*.js"
 			],
 			"preLaunchTask": "${defaultBuildTask}"
+		},
+		{
+			"name": "Attach to Python Functions",
+			"type": "python",
+			"request": "attach",
+			"port": 9091,
+			"preLaunchTask": "func: host start"
 		}
 	]
 }

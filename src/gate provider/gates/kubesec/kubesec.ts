@@ -119,17 +119,15 @@ export async function showTextDocumentWithErrors(kubesecResult: any, documentTex
     kubesecResult['scoring'].forEach(async (res: any) => {
         const searchSentence = res['selector'];
         const searchSentenceReadyToSearch = arrangeKubesecSelectorBeforeSearch(documentText, searchSentence);
-        const searchResult = hierarchySearchInFile(documentText, searchSentenceReadyToSearch);
-        if (searchResult) {
-            const requestedLine = searchResult.requestedLine;
-            const numOfTabs = searchResult.numOfTabs;
+        const searchResult = hierarchySearchInFile(documentText, searchSentenceReadyToSearch);   
+            const requestedLine = searchResult!.requestedLine;
+            const numOfTabs = searchResult!.numOfTabs;
             if (requestedLine === -1) {
                 displayErrorMessage(searchSentence + " not found!");
             }
             else {
                 highLightTextInFile(requestedLine, numOfTabs);
             }
-        }
     });
 }
 

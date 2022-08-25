@@ -1,45 +1,50 @@
-import path = require('path');
 import * as vscode from 'vscode';
-import { Gate } from './gates/gate';
 import { KubesecGate } from './gates/kubesec/kubesec-gate';
-import { TemplateAnalyzerGate } from './gates/template analyzer/template-analyzer-gate';
-import { TreeItem } from './tree-item';
-
+import { Gate } from './tree item classes/gate';
+import { TreeItem } from './tree item classes/tree-item';
+import * as gatesList from './gates/gateList.json';
+import { WhispersGate } from './gates/whispers/whispers-gate';
 
 
 export class GatesProvider implements vscode.TreeDataProvider<TreeItem> {
-  public gates: Gate[];
+  public gates: any[] = [];
   private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined | null | void> = new vscode.EventEmitter<TreeItem | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<TreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
-  constructor() {
-    const configuredView = vscode.workspace.getConfiguration().get('microsoft.security.gate.gates.activity.settings');
-    const gates_activity_settings: any = Object.assign({}, configuredView);
 
-    this.gates = [new KubesecGate(gates_activity_settings["kubesec"]),
-    new TemplateAnalyzerGate(gates_activity_settings["templateAnalyzer"])];
+  constructor() {
+    this.gates = [new KubesecGate(false),new WhispersGate()
+    ];
+    this.loadGates();
+  }
+
+  loadGates() {
+    gatesList.forEach((gate:any) => {
+      import(gate.path).then((x: any) => {
+        this.gates.push(new x[gate.name]());
+      });
+
+    });
   }
 
   getTreeItem(element: Gate): vscode.TreeItem {
     return element;
   }
 
-  getChildren(element?: TreeItem | undefined):any {
+  getChildren(element?: TreeItem | undefined): Thenable<TreeItem[]> {
     return element === undefined ?
       Promise.resolve(this.gates) :
       element.getMoreChildren(this);
   }
 
   activeAllGates() {
-    this.gates.forEach((gate) => { return gate.activate(); });
+    this.gates.forEach((gate) => { return gate.setIsActive(true); });
     this.refresh();
   }
 
-  refresh(treeItem?: TreeItem): void {
-    treeItem ?
-      this._onDidChangeTreeData.fire(treeItem) :
-      this._onDidChangeTreeData.fire();
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
   }
-
-
 }
+
+

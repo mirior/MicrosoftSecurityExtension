@@ -15,6 +15,12 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"type": "func",
+			"command": "host start",
+			"problemMatcher": "$func-python-watch",
+			"isBackground": true
 		}
 	]
 }
