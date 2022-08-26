@@ -1,0 +1,166 @@
+{
+  "name": "microsoft-security-gate",
+  "displayName": "Microsoft Security Gate",
+  "description": "GATES",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gates.refreshEntry",
+        "title": "gates.refreshEntry",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "kubesec.activate",
+        "title": "kubesec.activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "customGate.activate",
+        "title": "customGate.activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "kubesec.deactivate",
+        "title": "kubesec.deactivate",
+        "icon": "$(close)"
+      },
+      {
+        "command": "customGate.deactivate",
+        "title": "customGate.deactivate",
+        "icon": "$(close)"
+      },
+      {
+        "command": "gates.activate",
+        "title": "gates.activate"
+      },
+      {
+        "command": "microsoft-security-gate.gates",
+        "title": "Microsoft Security Gate"
+      },
+      {
+        "command": "gate.activate",
+        "title": "Activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "gates.activate",
+        "title": "Activate all",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "kubesec.showData",
+        "title": "kubesec.showData"
+      },
+      {
+        "command": "customGate.showData",
+        "title": "customGate.showData"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "package-explorer",
+          "title": "Microsoft Security Gate",
+          "icon": "$(tasklist)"
+        }
+      ]
+    },
+    "views": {
+      "package-explorer": [
+        {
+          "id": "package-gates",
+          "name": "Gates"
+        },
+        {
+          "id": "package-outline",
+          "name": "Outline"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "gates.refreshEntry",
+          "group": "navigation"
+        },
+        {
+          "command": "gates.activate",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "kubesec.activate",
+          "when": "view==package-gates&&viewItem==kubesec&& !kubesecActive",
+          "group": "inline"
+        },
+        {
+          "command": "customGate.activate",
+          "when": "view==package-gates&&viewItem==gate&&!gateActive",
+          "group": "inline"
+        },
+        {
+          "command": "kubesec.deactivate",
+          "when": "view==package-gates&&viewItem==kubesec&& kubesecActive",
+          "group": "inline"
+        },
+        {
+          "command": "customGate.deactivate",
+          "when": "view==package-gates&&viewItem==gate&&gateActive",
+          "group": "inline"
+        },
+        {
+          "command": "kubesec.showData"
+        },
+        {
+          "command": "customGate.showData"
+        },
+        {
+          "command": "customGate.deactivate",
+          "when": "view==package-gates&&viewItem==anyGate&&anyGateActive",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^16.11.46",
+    "@types/vscode": "^1.69.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.18.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "file-reader": "^1.1.1",
+    "form-data": "^4.0.0",
+    "formdata-node": "^4.3.3",
+    "get-all-files": "^4.1.0",
+    "path": "^0.12.7"
+  }
+}

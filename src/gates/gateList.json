@@ -1,0 +1,14 @@
+[
+    {
+        "path":"./gates/gateItem",
+        "name":"MyGate"
+    },
+    {
+        "path":"./gates/myGate",
+        "name":"Gate2"
+    },
+    {
+        "path":"./gates/whispers",
+        "name":"whispers"
+    }
+]
