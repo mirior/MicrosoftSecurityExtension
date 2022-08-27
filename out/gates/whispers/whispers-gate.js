@@ -26,17 +26,20 @@ class WhispersGate extends customer_gate_1.CustomGate {
             form.append(path, fileStream);
         });
         let whispersResult = await this.sendFileToWhispers(form);
-        //  let secrets:GateData[]=[];
-        // whispersResult.forEach((res:any) => {
-        //     const fileName=res['name'].split('.')[0];
-        //     let data=new GateData();
-        //     data.data=[new ResultsList("secrets",[new FileMessages(res['name'],fileName,[new GateResult(new Location(0,0), res['secrets'])])])];
-        //     secrets.push(data);
-        // });
-        let secrets = new gate_data_1.GateData();
-        secrets.data = [new gate_data_1.ResultsList("secrets", [new gate_data_1.FileMessages("res['name']", "fileName", [new gate_data_1.GateResult(new gate_data_1.Location(0, 0), whispersResult)])])];
-        // return secrets[0];
-        return secrets;
+        //  const { data } = whispersResult; // make sure we can get data
+        // let toJSON = JSON.parse(data);
+        let secrets = [];
+        //  whispersResult=whispersResult.replace('[','').replace(']','').split('}, ')
+        whispersResult.forEach((res) => {
+            const fileName = res['name'].split('.')[0];
+            let data = new gate_data_1.GateData();
+            data.data = [new gate_data_1.ResultsList("secrets", [new gate_data_1.FileMessages(res['name'], fileName, [new gate_data_1.GateResult(new gate_data_1.Location(0, 0), res['secrets'])])])];
+            secrets.push(data);
+        });
+        // let secrets:GateData=new GateData();
+        // secrets.data=[new ResultsList("secrets",[new FileMessages("res['name']","fileName",[new GateResult(new Location(0,0), whispersResult)])])];
+        //     // return secrets[0];
+        return secrets[0];
     }
     async sendFileToWhispers(data) {
         const response = await axios({
@@ -48,12 +51,8 @@ class WhispersGate extends customer_gate_1.CustomGate {
                 "Content-type": "multipart/form-data"
             }
         });
+        // const response=await axios.post("https://whisper-gate.azurewebsites.net/api/whispersGate",data,data.getHeaders());
         return response.data;
-        return [{ 'name': 'a.yaml', 'secrets': { 'apikey': 'YXNkZmZmZmZm_HARDcoded', 'TRAVEL_API_KEY': 'YXNkZmZmZmZm_HARDcoded', 'PRIVATE_API_TOKEN': 'YXNkZmZmZmZm_HARDcoded', 'slackKey': 'YXNkZmZmZmZm_HARDcoded', 'GITLAB_KEY': 'YXNkZmZmZmZm_HARDcoded', 'Google_token': 'YXNkZmZmZmZm_HARDcoded', 'GITHUBKEY': 'YXNkZmZmZmZm_HARDcoded', 'license_key': 'YXNkZmZmZmZm_HARDcoded', 'NUMERIC_APIKEY': '1925483168813050783076' } }, { 'name': 'y.yaml', 'secrets': { 'apikey': 'YXNkZmZmZmZm_HARDcoded', 'TRAVEL_API_KEY': 'YXNkZmZmZmZm_HARDcoded', 'Google_token': 'YXNkZmZmZmZm_HARDcoded', 'GITHUBKEY': 'YXNkZmZmZmZm_HARDcoded', 'license_key': 'YXNkZmZmZmZm_HARDcoded', 'NUMERIC_APIKEY': '1925483168813050783076' } }, { 'name': 'misc3.yml', 'secrets': {} }];
-        // )])])];
-        // vscode.window.showInformationMessage(response.data);
-        // return response.data;
-        // return data;
     }
 }
 exports.WhispersGate = WhispersGate;
