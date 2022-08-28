@@ -33,7 +33,6 @@ export class MyGate extends CustomGate {
                 value.kubesecResult[0]?.scoring?.passed?.length > 0 ? labelGate = this.labels[1] : labelGate;
                 value.kubesecResult[0]?.scoring?.advise?.length > 0 ? labelGate = this.labels[2] : labelGate;
 
-                // this.myData.data.push(  { fileName: value.filePath.slice(value.filePath.lastIndexOf('\\') + 1), filePath: value.filePath, result: value.kubesecResult });
             });
         });
         this.myData = new GateData();

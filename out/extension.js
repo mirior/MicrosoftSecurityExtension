@@ -49,11 +49,8 @@ async function activate(context) {
         vscode.window.showInformationMessage(arg.label + '.deactivate');
     });
     vscode.commands.registerCommand('customGate.showFileData', async (args, arg) => {
-        // const textDocument = await vscode.workspace.openTextDocument(vscode.workspace.workspaceFolders![0].uri.path+args);
         const textDocument = await vscode.workspace.openTextDocument(args);
         await vscode.window.showTextDocument(textDocument);
-        // const fileLines=await readFileByLines(args);
-        // arg.location.lineNumber =hierarchySearchInFile(fileLines!,[arg.item.split(' ')[0]]).requestedLine;
         (0, ShowFileYaml_1.jumpSpecifiedLine)(arg.location.lineNumber, args);
     });
 }

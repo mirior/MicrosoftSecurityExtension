@@ -4,7 +4,6 @@ import { FileMessages, GateData, GateResult, Location, ResultsList } from '../..
 import * as vscode from 'vscode';
 import FormData = require('form-data');
 const fs = require('fs');
-// const formData = require('form-data');
 const axios = require('axios');
 
 export class WhispersGate extends CustomGate {
@@ -25,49 +24,50 @@ export class WhispersGate extends CustomGate {
 
     public async scanData(): Promise<GateData> {
 
-        const form:FormData = new FormData(); //Data to be sent to the api
-        // const configFilePath=vscode.workspace.workspaceFolders![0].uri.path+"/src/gates/whispers/config.yaml";
-        // form.append(configFilePath,fs.createReadStream(configFilePath));   
+        const form: FormData = new FormData(); //Data to be sent to the api
 
-        const filePaths = await this.getFiles(new GetFileSettings([".yaml",".json"])); //the appropriate file paths
+        const configFilePath = vscode.workspace.workspaceFolders![0].uri.fsPath + "\\src\\gates\\whispers\\config.yaml";//my configuration file
+        form.append(configFilePath, fs.createReadStream(configFilePath));//The config file should be sent first   
+
+        const filePaths = await this.getFiles(new GetFileSettings([".yaml", ".json"])); //the appropriate file paths
         filePaths.forEach(path => {
-            let fileStream=fs.createReadStream(path);
-            form.append(path,fileStream);
+            let fileStream = fs.createReadStream(path);// create file stream from file path
+            form.append(path, fileStream);//Append all files to the data
         });
-try{
+        try {
 
- let whispersResult=await this.sendFilesToWhispers(form);
- let whispersResultArr= JSON.parse(whispersResult.replaceAll("'",'"'));
- let secrets=new GateData();
- secrets.data=[new ResultsList("secrets",[])];
- let resultNumber=0;
+            let whispersResult = await this.sendFilesToWhispers(form);//Sending the files to whispers api
+            let whispersResultArr = JSON.parse(whispersResult.replaceAll("'", '"'));// parse the result to JSON object
+            let secrets = new GateData();// Init secrets of files for the function response
+            secrets.data = [new ResultsList("secrets", [])];//Init secrets data with label: secrets
+            let resultNumber = 0;
 
- whispersResultArr.forEach((res:any) => {
-        const filePath=res['name'];
-        const fileName=filePath.slice(filePath.lastIndexOf('\\'),filePath.length).slice(1);
-        secrets.data[0].result!.push(new FileMessages(filePath,fileName,[]));
+            whispersResultArr.forEach((res: any) => {
+                const filePath = res['name'];// Path of the file
+                const fileName = filePath.slice(filePath.lastIndexOf('\\'), filePath.length).slice(1);//Name of the file
+                secrets.data[0].result!.push(new FileMessages(filePath, fileName, []));//Init FileMessages of the current file
 
-        res['secrets'].forEach((sec:any) => {
-            secrets.data[0].result[resultNumber].messages!.push(new GateResult(new Location(1,0),sec ));
-        });
+                res['secrets'].forEach((sec: any) => {//Running through all the secrets
+                    secrets.data[0].result[resultNumber].messages!.push(new GateResult(new Location(1, 0), sec));//Push secret with default location
+                });
 
-        resultNumber++;
-    });
-  vscode.window.showInformationMessage("Whispers is ready!");
-        return secrets;
-    }catch(ex){
-        displayErrorMessage("some files are invalid");
-        return new GateData();
+                resultNumber++;//next file
+            });
+            vscode.window.showInformationMessage("Whispers is ready!");
+            return secrets;
+        } catch (ex:any) {
+            displayErrorMessage(ex.message);
+            return new GateData();
+        }
     }
-    }
 
-    async sendFilesToWhispers(data: FormData):Promise<any> {
-      
+    async sendFilesToWhispers(data: FormData): Promise<any> {
+
         const response = await axios({
             //sending to the api
             method: "post",
             url: 'https://whisper-gate.azurewebsites.net/api/whispersGate',
-            data: data,//new formData(fs.createReadStream(filePath)),
+            data: data,
             headers:
             {
                 "Content-type": "multipart/form-data"
@@ -75,7 +75,7 @@ try{
         });
 
         return response.data;
-      
-        }
+
+    }
 
 }

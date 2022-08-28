@@ -6,7 +6,9 @@ const highLight_1 = require("./highLight");
 const search_1 = require("./search");
 async function showTextDocumentWithErrors(result, documentText) {
     result.forEach(async (res) => {
-        res.location.lineNumber = (0, search_1.hierarchySearchInFile)(documentText, [res.message.split(' ')[0]]).requestedLine;
+        const searchResults = (0, search_1.hierarchySearchInFile)(documentText, [res.message.split(' ')[0]]);
+        res.location.lineNumber = searchResults.requestedLine;
+        documentText = searchResults.fileToSearchIn;
         (0, highLight_1.highLightTextInFile)(res.location.lineNumber, res.location.columnNumber);
     });
 }

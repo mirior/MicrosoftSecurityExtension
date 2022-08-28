@@ -7,7 +7,6 @@ const gate_data_1 = require("../../customGate/gate-data");
 const vscode = require("vscode");
 const FormData = require("form-data");
 const fs = require('fs');
-// const formData = require('form-data');
 const axios = require('axios');
 class WhispersGate extends customer_gate_1.CustomGate {
     constructor() {
@@ -21,33 +20,33 @@ class WhispersGate extends customer_gate_1.CustomGate {
     }
     async scanData() {
         const form = new FormData(); //Data to be sent to the api
-        // const configFilePath=vscode.workspace.workspaceFolders![0].uri.path+"/src/gates/whispers/config.yaml";
-        // form.append(configFilePath,fs.createReadStream(configFilePath));   
+        const configFilePath = vscode.workspace.workspaceFolders[0].uri.fsPath + "\\src\\gates\\whispers\\config.yaml"; //my configuration file
+        form.append(configFilePath, fs.createReadStream(configFilePath)); //The config file should be sent first   
         const filePaths = await this.getFiles(new gate_functions_1.GetFileSettings([".yaml", ".json"])); //the appropriate file paths
         filePaths.forEach(path => {
-            let fileStream = fs.createReadStream(path);
-            form.append(path, fileStream);
+            let fileStream = fs.createReadStream(path); // create file stream from file path
+            form.append(path, fileStream); //Append all files to the data
         });
         try {
-            let whispersResult = await this.sendFilesToWhispers(form);
-            let whispersResultArr = JSON.parse(whispersResult.replaceAll("'", '"'));
-            let secrets = new gate_data_1.GateData();
-            secrets.data = [new gate_data_1.ResultsList("secrets", [])];
+            let whispersResult = await this.sendFilesToWhispers(form); //Sending the files to whispers api
+            let whispersResultArr = JSON.parse(whispersResult.replaceAll("'", '"')); // parse the result to JSON object
+            let secrets = new gate_data_1.GateData(); // Init secrets of files for the function response
+            secrets.data = [new gate_data_1.ResultsList("secrets", [])]; //Init secrets data with label: secrets
             let resultNumber = 0;
             whispersResultArr.forEach((res) => {
-                const filePath = res['name'];
-                const fileName = filePath.slice(filePath.lastIndexOf('\\'), filePath.length).slice(1);
-                secrets.data[0].result.push(new gate_data_1.FileMessages(filePath, fileName, []));
+                const filePath = res['name']; // Path of the file
+                const fileName = filePath.slice(filePath.lastIndexOf('\\'), filePath.length).slice(1); //Name of the file
+                secrets.data[0].result.push(new gate_data_1.FileMessages(filePath, fileName, [])); //Init FileMessages of the current file
                 res['secrets'].forEach((sec) => {
-                    secrets.data[0].result[resultNumber].messages.push(new gate_data_1.GateResult(new gate_data_1.Location(1, 0), sec));
+                    secrets.data[0].result[resultNumber].messages.push(new gate_data_1.GateResult(new gate_data_1.Location(1, 0), sec)); //Push secret with default location
                 });
-                resultNumber++;
+                resultNumber++; //next file
             });
             vscode.window.showInformationMessage("Whispers is ready!");
             return secrets;
         }
         catch (ex) {
-            (0, gate_functions_1.displayErrorMessage)("some files are invalid");
+            (0, gate_functions_1.displayErrorMessage)(ex.message);
             return new gate_data_1.GateData();
         }
     }
