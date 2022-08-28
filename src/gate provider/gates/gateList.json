@@ -1,0 +1,6 @@
+[
+    {
+        "path":"./gates/whispers/whispers-gate",
+        "name":"WhispersGate"
+    }
+]

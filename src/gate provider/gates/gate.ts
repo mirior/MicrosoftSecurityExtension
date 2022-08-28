@@ -1,9 +1,11 @@
 import * as vscode from 'vscode';
+import { GatesProvider } from '../gate-provider';
 import { TreeItem } from '../tree-item';
 const { writeFileSync, readFileSync } = require('fs');
 
 
 export class Gate extends TreeItem {
+  public myProvider: GatesProvider | undefined;
   private _isActive = this.isActive;
   constructor(
     public readonly label: string,
@@ -28,8 +30,8 @@ export class Gate extends TreeItem {
     await vscode.workspace.getConfiguration().update('microsoft.security.gate.gates.activity.settings', newSetting, vscode.ConfigurationTarget.Global);
   }
 
-  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined):any {
-    !this._isActive?vscode.window.showInformationMessage("In order to use the gate you must activate it"):null;
+  public getMoreChildren(element?: vscode.TreeDataProvider<TreeItem> | undefined): any {
+    !this._isActive ? vscode.window.showInformationMessage("In order to use the gate you must activate it") : null;
     return Promise.resolve([]);
   }
 

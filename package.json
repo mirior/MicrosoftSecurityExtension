@@ -14,27 +14,6 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-  "grammars": [
-      {
-          "language": "Log",
-          "scopeName": "code.log",
-          "path": "./src/syntaxes/log.tmLanguage"
-      }
-  ],
-    "configuration": [
-			{
-				"id": "configurationSamples",
-				"title": "Configuration Sample",
-				"properties": {	 
-          "microsoft.security.gate.gates.activity.settings": {
-						"type": "object",
-						"default": {},
-						"description": "activity settings for all MICROSOFT SECURITY GATE gates",
-						"scope": "window"
-					}
-				}
-			}
-		],         
     "commands": [
       {
         "command": "gates.refreshEntry",
@@ -42,27 +21,50 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "gate.activate",
-        "title": "activate",
+        "command": "kubesec.activate",
+        "title": "kubesec.activate",
         "icon": "$(check)"
       },
       {
-        "command": "gate.deactivate",
-        "title": "deactivate",
+        "command": "customGate.activate",
+        "title": "customGate.activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "kubesec.deactivate",
+        "title": "kubesec.deactivate",
+        "icon": "$(close)"
+      },
+      {
+        "command": "customGate.deactivate",
+        "title": "customGate.deactivate",
         "icon": "$(close)"
       },
       {
         "command": "gates.activate",
-        "title": "activate all",
+        "title": "gates.activate"
+      },
+      {
+        "command": "microsoft-security-gate.gates",
+        "title": "Microsoft Security Gate"
+      },
+      {
+        "command": "gate.activate",
+        "title": "Activate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "gates.activate",
+        "title": "Activate all",
         "icon": "$(check-all)"
       },
       {
-        "command": "showTextDocument",
-        "title": "showTextDocument"
+        "command": "kubesec.showData",
+        "title": "kubesec.showData"
       },
       {
-        "command": "kubesec.showScoring",
-        "title": "kubesec.showScoring"
+        "command": "customGate.showData",
+        "title": "customGate.showData"
       }
     ],
     "viewsContainers": {
@@ -99,30 +101,35 @@
       ],
       "view/item/context": [
         {
-          "command": "gate.activate",
+          "command": "kubesec.activate",
           "when": "view==package-gates&&viewItem==kubesec&& !kubesecActive",
           "group": "inline"
         },
         {
-          "command": "gate.deactivate",
-          "when": "view==package-gates&&viewItem==templateAnalyzer&& templateAnalyzerActive",
+          "command": "customGate.activate",
+          "when": "view==package-gates&&viewItem==gate&&!gateActive",
           "group": "inline"
         },
         {
-          "command": "gate.activate",
-          "when": "view==package-gates&&viewItem==templateAnalyzer&& !templateAnalyzerActive",
-          "group": "inline"
-        },
-        {
-          "command": "gate.deactivate",
+          "command": "kubesec.deactivate",
           "when": "view==package-gates&&viewItem==kubesec&& kubesecActive",
           "group": "inline"
         },
         {
-          "command": "showTextDocument"
+          "command": "customGate.deactivate",
+          "when": "view==package-gates&&viewItem==gate&&gateActive",
+          "group": "inline"
         },
         {
-          "command": "kubesec.showScoring"
+          "command": "kubesec.showData"
+        },
+        {
+          "command": "customGate.showData"
+        },
+        {
+          "command": "customGate.deactivate",
+          "when": "view==package-gates&&viewItem==anyGate&&anyGateActive",
+          "group": "inline"
         }
       ]
     }
@@ -138,7 +145,7 @@
   "devDependencies": {
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.1",
-    "@types/node": "16.x",
+    "@types/node": "^16.11.46",
     "@types/vscode": "^1.69.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
@@ -151,7 +158,9 @@
   "dependencies": {
     "axios": "^0.27.2",
     "file-reader": "^1.1.1",
+    "form-data": "^4.0.0",
     "formdata-node": "^4.3.3",
-    "get-all-files": "^4.1.0"
+    "get-all-files": "^4.1.0",
+    "path": "^0.12.7"
   }
 }

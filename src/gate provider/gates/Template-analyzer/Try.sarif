@@ -1,0 +1,395 @@
+{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "TA-000009",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "id": "default"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "microsoft-security-gate/src/Template-analyzer/Arm%20template%20files/VaAssessorGo.Template.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 58
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "TA-000011",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "id": "default"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "microsoft-security-gate/src/Template-analyzer/Arm%20template%20files/VaAssessorGo.Template.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 58
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "ARM BPA",
+          "organization": "Microsoft",
+          "fullName": "ARM Template Best Practice Analyzer",
+          "version": "0.2.0",
+          "informationUri": "https://github.com/Azure/template-analyzer",
+          "rules": [
+            {
+              "id": "TA-000009",
+              "fullDescription": {
+                "text": "FTPS only should be required in your Function App."
+              },
+              "messageStrings": {
+                "default": {
+                  "text": "FTPS only should be required in your Function App."
+                }
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://github.com/Azure/template-analyzer/blob/main/docs/built-in-bpa-rules.md/#ta-000009-ftps-only-should-be-required-in-your-function-app",
+              "help": {
+                "text": "Enable FTPS enforcement for enhanced security."
+              }
+            },
+            {
+              "id": "TA-000011",
+              "fullDescription": {
+                "text": "Latest TLS version should be used in your Function App."
+              },
+              "messageStrings": {
+                "default": {
+                  "text": "Latest TLS version should be used in your Function App."
+                }
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://github.com/Azure/template-analyzer/blob/main/docs/built-in-bpa-rules.md/#ta-000011-latest-tls-version-should-be-used-in-your-function-app",
+              "help": {
+                "text": "Upgrade to the latest TLS version."
+              }
+            }
+          ]
+        }
+      },
+      "invocations": [
+        {
+          "startTimeUtc": "2022-08-28T09:36:34.555Z",
+          "endTimeUtc": "2022-08-28T09:36:37.975Z",
+          "toolExecutionNotifications": [
+            {
+              "message": {
+                "text": "An exception occurred while evaluating the properties of a resource. Properties: \"roleDefinitionId\": \"/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Authorization/roleDefinitions/090c5cfd-751d-490a-894a-3ce6f1109419\", \"principalId\": \"[reference(variables('AnalyticsMIResourceID'), '2018-11-30', 'Full').properties.principalId]\", \"scope\": \"[variables('ResourceGroupID')]\""
+              },
+              "exception": {
+                "kind": "ExpressionException",
+                "message": "The language expression property 'properties' can't be evaluated.",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.SelectProperty(JToken root, JToken property, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.EvaluateExpression(ExpressionEvaluationContext context, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsInternal(JToken root, ExpressionEvaluationContext evaluationContext, Boolean ignoreExceptions, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsRecursive(JToken root, ExpressionEvaluationContext evaluationContext, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.Azure.Templates.Analyzer.TemplateProcessor.ArmTemplateProcessor.ProcessTemplateResourceLanguageExpressions(TemplateResource templateResource, TemplateExpressionEvaluationHelper evaluationHelper)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            },
+            {
+              "message": {
+                "text": "An exception occurred while evaluating the properties of a resource. Properties: \"roleDefinitionId\": \"/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe\", \"principalId\": \"[reference(variables('AnalyticsMIResourceID'), '2018-11-30', 'Full').properties.principalId]\""
+              },
+              "exception": {
+                "kind": "ExpressionException",
+                "message": "The language expression property 'properties' can't be evaluated.",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.SelectProperty(JToken root, JToken property, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.EvaluateExpression(ExpressionEvaluationContext context, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsInternal(JToken root, ExpressionEvaluationContext evaluationContext, Boolean ignoreExceptions, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsRecursive(JToken root, ExpressionEvaluationContext evaluationContext, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.Azure.Templates.Analyzer.TemplateProcessor.ArmTemplateProcessor.ProcessTemplateResourceLanguageExpressions(TemplateResource templateResource, TemplateExpressionEvaluationHelper evaluationHelper)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            },
+            {
+              "message": {
+                "text": "An exception occurred while evaluating the properties of a resource. Properties: \"roleDefinitionId\": \"/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe\", \"principalId\": \"[reference(resourceId('Microsoft.Web/sites',parameters('FunctionAppName')),'2019-08-01','full').identity.principalId]\""
+              },
+              "exception": {
+                "kind": "ExpressionException",
+                "message": "The language expression property 'identity' can't be evaluated.",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.SelectProperty(JToken root, JToken property, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.EvaluateExpression(ExpressionEvaluationContext context, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsInternal(JToken root, ExpressionEvaluationContext evaluationContext, Boolean ignoreExceptions, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsRecursive(JToken root, ExpressionEvaluationContext evaluationContext, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.Azure.Templates.Analyzer.TemplateProcessor.ArmTemplateProcessor.ProcessTemplateResourceLanguageExpressions(TemplateResource templateResource, TemplateExpressionEvaluationHelper evaluationHelper)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            },
+            {
+              "message": {
+                "text": "An exception occurred while evaluating the properties of a resource. Properties: \"name\": \"defaultString0\", \"siteConfig\": {\r\n  \"use32BitWorkerProcess\": false,\r\n  \"appSettings\": [\r\n    {\r\n      \"name\": \"AzureWebJobsStorage\",\r\n      \"value\": \"[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('UntrustedFunctionsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('UntrustedFunctionsStorageAccountName')), '2015-06-15').key1, ';EndpointSuffix=', environment().suffixes.storage)]\"\r\n    },\r\n    {\r\n      \"name\": \"AzureWebJobsSecretStorageType\",\r\n      \"value\": \"Files\"\r\n    },\r\n    {\r\n      \"name\": \"FUNCTIONS_EXTENSION_VERSION\",\r\n      \"value\": \"~4\"\r\n    },\r\n    {\r\n      \"name\": \"ArmEndpoint\",\r\n      \"value\": \"[environment().resourceManager]\"\r\n    },\r\n    {\r\n      \"name\": \"WEBSITE_RUN_FROM_PACKAGE\",\r\n      \"value\": \"1\"\r\n    },\r\n    {\r\n      \"name\": \"APPINSIGHTS_INSTRUMENTATIONKEY\",\r\n      \"value\": \"[reference(concat('microsoft.insights/components/', parameters('UntrustedFunctionAppsApplicationInsights')), '2015-05-01').InstrumentationKey]\"\r\n    },\r\n    {\r\n      \"name\": \"APPLICATIONINSIGHTS_CONNECTION_STRING\",\r\n      \"value\": \"[reference(concat('microsoft.insights/components/', parameters('UntrustedFunctionAppsApplicationInsights')), '2015-05-01').ConnectionString]\"\r\n    },\r\n    {\r\n      \"name\": \"WEBSITE_CONTENTSHARE\",\r\n      \"value\": \"[parameters('FunctionAppName')]\"\r\n    },\r\n    {\r\n      \"name\": \"SUBSCRIPTION_ID\",\r\n      \"value\": \"[subscription().subscriptionId]\"\r\n    },\r\n    {\r\n      \"name\": \"RESOURCE_GROUP\",\r\n      \"value\": \"[resourceGroup().Name]\"\r\n    },\r\n    {\r\n      \"name\": \"WEBSITE_CONTENTAZUREFILECONNECTIONSTRING\",\r\n      \"value\": \"[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('UntrustedFunctionsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('UntrustedFunctionsStorageAccountName')), '2019-06-01').keys[0].value )]\"\r\n    },\r\n    {\r\n      \"name\": \"VulnerabilityDatabaseUrl\",\r\n      \"value\": \"[parameters('VulnerabilityDatabaseUrl')]\"\r\n    }\r\n  ],\r\n  \"alwaysOn\": true\r\n}, \"clientAffinityEnabled\": true, \"clientCertEnabled\": false, \"httpsOnly\": true, \"hostNamesDisabled\": false, \"serverFarmId\": \"[concat(resourcegroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('UntrustedFunctionAppsHostingPlanName'))]\""
+              },
+              "exception": {
+                "kind": "ExpressionException",
+                "message": "The language expression property 'key1' can't be evaluated.",
+                "stack": {
+                  "frames": [
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.SelectProperty(JToken root, JToken property, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.EvaluateExpression(ExpressionEvaluationContext context, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.<>c__DisplayClass23_0.<EvaluateParameters>b__0(LanguageExpression parameter)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "System.Array.ConvertAll[TInput,TOutput](TInput[] array, Converter`2 converter)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.WindowsAzure.ResourceStack.Common.Extensions.IEnumerableExtensions.SelectArray[TSource,TElement](TSource[] source, Converter`2 elementSelector)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.EvaluateParameters(ExpressionEvaluationContext context, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Expressions.FunctionExpression.EvaluateExpression(ExpressionEvaluationContext context, TemplateErrorAdditionalInfo additionalInfo)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsInternal(JToken root, ExpressionEvaluationContext evaluationContext, Boolean ignoreExceptions, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Azure.Deployments.Expression.Engines.ExpressionsEngine.EvaluateLanguageExpressionsRecursive(JToken root, ExpressionEvaluationContext evaluationContext, TemplateErrorAdditionalInfo additionalInfo, InsensitiveHashSet skipEvaluationPaths)"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "location": {
+                        "logicalLocations": [
+                          {
+                            "fullyQualifiedName": "Microsoft.Azure.Templates.Analyzer.TemplateProcessor.ArmTemplateProcessor.ProcessTemplateResourceLanguageExpressions(TemplateResource templateResource, TemplateExpressionEvaluationHelper evaluationHelper)"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "innerExceptions": []
+              }
+            }
+          ],
+          "executionSuccessful": true
+        }
+      ],
+      "originalUriBaseIds": {
+        "ROOTPATH": {
+          "uri": "file:///C:/Users/USER/Documents/bootcamp%20Microsoft/Lesson%2013"
+        }
+      },
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}
