@@ -36,13 +36,13 @@ export async function activate(context: vscode.ExtensionContext) {
 		await vscode.window.showTextDocument(textDocument);
 	});
 
-	vscode.commands.registerCommand('customGate.showData', async (arg, item) => {
+	vscode.commands.registerCommand('customGate.showData', async (arg,item) => {
 		const filePath = arg;
 		const textDocument = await vscode.workspace.openTextDocument(filePath);
 		await vscode.window.showTextDocument(textDocument);
-		activeTextDocument = await readFileByLines(textDocument.fileName);
+		activeTextDocument=await readFileByLines(textDocument.fileName);
 		await showTextDocumentWithErrors(item, activeTextDocument!);
-	});
+	  });
 
 	vscode.commands.registerCommand('kubesec.activate', async (arg: KubesecGate) => {
 		arg.activate();
@@ -50,17 +50,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	vscode.commands.registerCommand('customGate.activate', async (arg) => {
-		// await vscode.window.withProgress({
-		// 	location: vscode.ProgressLocation.Notification,
-		// }, async (progress) => {
-		// 	progress.report({
-		// 		message: `Scanning ...`
-		// 	});
-			arg.activate();
-			arg.contextValue = "anyGate";
-			vscode.commands.executeCommand('setContext', 'anyGateActive', true);
-			myGates.refresh();
-		// });
+		arg.activate();
+		arg.contextValue = "anyGate";
+		vscode.commands.executeCommand('setContext', 'anyGateActive', true);
+		myGates.refresh();
 		vscode.window.showInformationMessage(arg.label + '.activate');
 	});
 
