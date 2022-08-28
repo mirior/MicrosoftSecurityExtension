@@ -29,10 +29,10 @@ export class FileMessages{
 
 export class GateResult
 {   
-    public location:Location;
+    public location:Location | string;
     public message:string;
 
-    constructor(location:Location,message:string) {       
+    constructor(location:Location |string,message:string) {       
         this.location=location;
         this.message=message;
     }

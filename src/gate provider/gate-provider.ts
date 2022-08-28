@@ -4,7 +4,7 @@ import { Gate } from './gates/gate';
 import { KubesecGate } from './gates/kubesec/kubesec-gate';
 import { TreeItem } from './tree-item';
 import * as gatesList from './gates/gateList.json';
-import { TemplateAnalyzerGate } from './gates/Template-analyzer/template-gate';
+import { TemplateAnalyzerGate } from './gates/template-analyzer/template-gate';
 
 
 

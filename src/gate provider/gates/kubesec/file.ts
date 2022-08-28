@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TreeItem } from '../../tree-item';
-import { kubesec } from '../kubesec/kubesec';
+import { kubesec } from './kubesec';
 import { ScoringItem } from './scoring';
 
 export class File extends TreeItem {

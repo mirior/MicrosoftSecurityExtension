@@ -1,13 +1,18 @@
 import { Position, Range, Selection, Uri, window, workspace } from "vscode";
+import { Location } from "./customGate/gate-data";
 
 import { highLightTextInFile } from "./highLight";
 import { hierarchySearchInFile } from "./search";
 
 export async function showTextDocumentWithErrors(result: any, documentText: string[]) {
-    result.forEach(async (res: any) => {
-    res.location.lineNumber =hierarchySearchInFile(documentText,[res.message.split(' ')[0]]).requestedLine;
-        highLightTextInFile(res.location.lineNumber,res.location.columnNumber);
-    });
+
+
+	result.forEach(async (res: any) => {
+		if (typeof (res.location) === typeof (Location)) {
+			res.location.lineNumber = hierarchySearchInFile(documentText, [res.message.split(' ')[0]]).requestedLine;
+			highLightTextInFile(res.location.lineNumber, res.location.columnNumber);
+		}
+	});
 }
 
 
