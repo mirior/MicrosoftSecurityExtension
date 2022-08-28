@@ -4,13 +4,15 @@ const outputChannelName = "MDC-Microsoft Security Gate";
 
 const MDCOutputChannel = vscode.window.createOutputChannel(outputChannelName);
 
+
+
 export function appendLineToOutputChannel(message: string) {
     MDCOutputChannel.appendLine(message);
 }
 
 export function fileKubesecResultToOutputChannel(file: string, kubesecResult: any[]) {
     appendLineToOutputChannel(file);
-    const message=kubesecResult[0].message;
+    const message = kubesecResult[0].message;
     appendLineToOutputChannel(message);
     const critical: [] | undefined = kubesecResult[0].scoring?.critical;
     const passed: [] | undefined = kubesecResult[0].scoring?.passed;
