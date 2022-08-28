@@ -21,7 +21,9 @@ class WhispersGate extends customer_gate_1.CustomGate {
     }
     async scanData() {
         const form = new FormData(); //Data to be sent to the api
-        const filePaths = await this.getFiles(new gate_functions_1.GetFileSettings([".yaml"])); //the appropriate file paths
+        // const configFilePath=vscode.workspace.workspaceFolders![0].uri.path+"/src/gates/whispers/config.yaml";
+        // form.append(configFilePath,fs.createReadStream(configFilePath));   
+        const filePaths = await this.getFiles(new gate_functions_1.GetFileSettings([".yaml", ".json"])); //the appropriate file paths
         filePaths.forEach(path => {
             let fileStream = fs.createReadStream(path);
             form.append(path, fileStream);
@@ -45,7 +47,7 @@ class WhispersGate extends customer_gate_1.CustomGate {
             return secrets;
         }
         catch (ex) {
-            (0, gate_functions_1.displayErrorMessage)("error");
+            (0, gate_functions_1.displayErrorMessage)("some files are invalid");
             return new gate_data_1.GateData();
         }
     }

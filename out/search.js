@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.jumpSpecifiedLine = exports.hierarchySearchInFile = void 0;
-const vscode = require("vscode");
+exports.hierarchySearchInFile = void 0;
 function hierarchySearchInFile(fileToSearchIn, searchSentence) {
     let searchSentenceIndex = 0;
     let requestedLine = -1;
@@ -41,18 +40,4 @@ function numberOfTabs(text) {
     }
     return count;
 }
-async function jumpSpecifiedLine(lineNumber, filePath) {
-    var pos1 = new vscode.Position(lineNumber, 0);
-    var openPath = vscode.Uri.file(filePath);
-    vscode.workspace.openTextDocument(openPath).then((doc) => {
-        vscode.window.showTextDocument(doc).then((editor) => {
-            // Line added - by having a selection at the same position twice, the cursor jumps there
-            editor.selections = [new vscode.Selection(pos1, pos1)];
-            // And the visible range jumps there too
-            var range = new vscode.Range(pos1, pos1);
-            editor.revealRange(range);
-        });
-    });
-}
-exports.jumpSpecifiedLine = jumpSpecifiedLine;
 //# sourceMappingURL=search.js.map

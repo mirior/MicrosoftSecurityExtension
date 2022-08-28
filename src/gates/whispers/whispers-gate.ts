@@ -1,10 +1,8 @@
 import { CustomGate } from '../../customGate/customer-gate';
-import { readFileSync } from 'fs';
 import { displayErrorMessage, GetFileSettings } from '../../customGate/gate-functions';
 import { FileMessages, GateData, GateResult, Location, ResultsList } from '../../customGate/gate-data';
 import * as vscode from 'vscode';
 import FormData = require('form-data');
-import { AxiosRequestConfig } from 'axios';
 const fs = require('fs');
 // const formData = require('form-data');
 const axios = require('axios');
@@ -28,8 +26,10 @@ export class WhispersGate extends CustomGate {
     public async scanData(): Promise<GateData> {
 
         const form:FormData = new FormData(); //Data to be sent to the api
+        // const configFilePath=vscode.workspace.workspaceFolders![0].uri.path+"/src/gates/whispers/config.yaml";
+        // form.append(configFilePath,fs.createReadStream(configFilePath));   
 
-        const filePaths = await this.getFiles(new GetFileSettings([".yaml"])); //the appropriate file paths
+        const filePaths = await this.getFiles(new GetFileSettings([".yaml",".json"])); //the appropriate file paths
         filePaths.forEach(path => {
             let fileStream=fs.createReadStream(path);
             form.append(path,fileStream);
@@ -56,7 +56,7 @@ try{
   vscode.window.showInformationMessage("Whispers is ready!");
         return secrets;
     }catch(ex){
-        displayErrorMessage("error");
+        displayErrorMessage("some files are invalid");
         return new GateData();
     }
     }

@@ -43,16 +43,4 @@ function numberOfTabs(text: string) {
 	return count;
 }
 
-export async function jumpSpecifiedLine(lineNumber: number, filePath: string) {
-	var pos1 = new vscode.Position(lineNumber, 0);
-	var openPath = vscode.Uri.file(filePath);
-	vscode.workspace.openTextDocument(openPath).then((doc: any) => {
-		vscode.window.showTextDocument(doc).then((editor: any) => {
-			// Line added - by having a selection at the same position twice, the cursor jumps there
-			editor.selections = [new vscode.Selection(pos1, pos1)];
-			// And the visible range jumps there too
-			var range = new vscode.Range(pos1, pos1);
-			editor.revealRange(range);
-		});
-	});
-}
+
