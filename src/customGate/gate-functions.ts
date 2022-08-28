@@ -2,7 +2,8 @@ import { getAllFilesSync } from "get-all-files";
 import path = require("path");
 import { OutputChannel, Uri, window, workspace } from "vscode";
 import { File } from "../tree item classes/file";
-
+import * as fs from 'fs';
+import * as vscode from 'vscode';
 
 export class GateFunctions {
 
@@ -39,6 +40,7 @@ export class GateFunctions {
     }
 
 
+   
 }
 
 export class GetFileSettings {
@@ -49,5 +51,18 @@ export class GetFileSettings {
         this.pathToSearch = pathToSearch;
     }
 }
+export async function readFileByLines(pathOfFileToSearchIn: string) {
+    try {
+        const document = await fs.readFileSync(pathOfFileToSearchIn, "utf8");
+        const documentStringLines = document.trim().split('\n');
+        return documentStringLines;
+    }
+    catch (Error) {
+        displayErrorMessage("There is no such file!");
+    }
+}
+export function displayErrorMessage(message: string) {
+    vscode.window.showErrorMessage(message);
 
+}
 

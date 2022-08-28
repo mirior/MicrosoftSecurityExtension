@@ -1,11 +1,12 @@
 import { Position, Range, Selection, Uri, window, workspace } from "vscode";
 
-import * as fs from 'fs';
 import { highLightTextInFile } from "./highLight";
+import { hierarchySearchInFile } from "./search";
 
 export async function showTextDocumentWithErrors(result: any, documentText: string[]) {
     result.forEach(async (res: any) => {
-        highLightTextInFile(res.location.lineNumber - 1,res.location.columnNumber);
+    res.location.lineNumber =hierarchySearchInFile(documentText,[res.message.split(' ')[0]]).requestedLine;
+        highLightTextInFile(res.location.lineNumber,res.location.columnNumber);
     });
 }
 

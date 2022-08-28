@@ -4,6 +4,7 @@ exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const gate_provider_1 = require("./gate-provider");
 const ShowFileYaml_1 = require("./ShowFileYaml");
+const gate_functions_1 = require("./customGate/gate-functions");
 async function activate(context) {
     var myGates = new gate_provider_1.GatesProvider();
     let activeTextDocument;
@@ -22,6 +23,7 @@ async function activate(context) {
         const filePath = arg;
         const textDocument = await vscode.workspace.openTextDocument(filePath);
         await vscode.window.showTextDocument(textDocument);
+        activeTextDocument = await (0, gate_functions_1.readFileByLines)(textDocument.fileName);
         await (0, ShowFileYaml_1.showTextDocumentWithErrors)(item, activeTextDocument);
     });
     vscode.commands.registerCommand('kubesec.activate', async (arg) => {
@@ -47,9 +49,12 @@ async function activate(context) {
         vscode.window.showInformationMessage(arg.label + '.deactivate');
     });
     vscode.commands.registerCommand('customGate.showFileData', async (args, arg) => {
-        const textDocument = await vscode.workspace.openTextDocument(vscode.workspace.workspaceFolders[0].uri.path + args);
+        // const textDocument = await vscode.workspace.openTextDocument(vscode.workspace.workspaceFolders![0].uri.path+args);
+        const textDocument = await vscode.workspace.openTextDocument(args);
         await vscode.window.showTextDocument(textDocument);
-        (0, ShowFileYaml_1.jumpSpecifiedLine)(arg.location.lineNumber - 1, args);
+        // const fileLines=await readFileByLines(args);
+        // arg.location.lineNumber =hierarchySearchInFile(fileLines!,[arg.item.split(' ')[0]]).requestedLine;
+        (0, ShowFileYaml_1.jumpSpecifiedLine)(arg.location.lineNumber, args);
     });
 }
 exports.activate = activate;

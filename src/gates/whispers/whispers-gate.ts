@@ -1,6 +1,6 @@
 import { CustomGate } from '../../customGate/customer-gate';
 import { readFileSync } from 'fs';
-import { GetFileSettings } from '../../customGate/gate-functions';
+import { displayErrorMessage, GetFileSettings } from '../../customGate/gate-functions';
 import { FileMessages, GateData, GateResult, Location, ResultsList } from '../../customGate/gate-data';
 import * as vscode from 'vscode';
 import FormData = require('form-data');
@@ -34,27 +34,35 @@ export class WhispersGate extends CustomGate {
             let fileStream=fs.createReadStream(path);
             form.append(path,fileStream);
         });
+try{
 
- let whispersResult=await this.sendFileToWhispers(form);
-//  const { data } = whispersResult; // make sure we can get data
-// let toJSON = JSON.parse(data);
- let secrets:GateData[]=[];
-//  whispersResult=whispersResult.replace('[','').replace(']','').split('}, ')
-    whispersResult.forEach((res:any) => {
-        const fileName=res['name'].split('.')[0];
-        let data=new GateData();
-        data.data=[new ResultsList("secrets",[new FileMessages(res['name'],fileName,[new GateResult(new Location(0,0), res['secrets'])])])];
-        secrets.push(data);
+ let whispersResult=await this.sendFilesToWhispers(form);
+ let whispersResultArr= JSON.parse(whispersResult.replaceAll("'",'"'));
+ let secrets=new GateData();
+ secrets.data=[new ResultsList("secrets",[])];
+ let resultNumber=0;
+
+ whispersResultArr.forEach((res:any) => {
+        const filePath=res['name'];
+        const fileName=filePath.slice(filePath.lastIndexOf('\\'),filePath.length).slice(1);
+        secrets.data[0].result!.push(new FileMessages(filePath,fileName,[]));
+
+        res['secrets'].forEach((sec:any) => {
+            secrets.data[0].result[resultNumber].messages!.push(new GateResult(new Location(1,0),sec ));
+        });
+
+        resultNumber++;
     });
-    // let secrets:GateData=new GateData();
-
-    // secrets.data=[new ResultsList("secrets",[new FileMessages("res['name']","fileName",[new GateResult(new Location(0,0), whispersResult)])])];
-
-    //     // return secrets[0];
-        return secrets[0];
+  vscode.window.showInformationMessage("Whispers is ready!");
+        return secrets;
+    }catch(ex){
+        displayErrorMessage("error");
+        return new GateData();
+    }
     }
 
-    async sendFileToWhispers(data: FormData):Promise<any> {
+    async sendFilesToWhispers(data: FormData):Promise<any> {
+      
         const response = await axios({
             //sending to the api
             method: "post",
@@ -65,17 +73,9 @@ export class WhispersGate extends CustomGate {
                 "Content-type": "multipart/form-data"
             }
         });
-        // const response=await axios.post("https://whisper-gate.azurewebsites.net/api/whispersGate",data,data.getHeaders());
+
         return response.data;
       
         }
 
 }
-export interface AxiosResponse<T = any>  {
-    data: T;
-    status: number;
-    statusText: string;
-    headers: any;
-    config: AxiosRequestConfig;
-    request?: any;
-  }

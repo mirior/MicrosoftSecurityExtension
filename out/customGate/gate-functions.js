@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetFileSettings = exports.GateFunctions = void 0;
+exports.displayErrorMessage = exports.readFileByLines = exports.GetFileSettings = exports.GateFunctions = void 0;
 const get_all_files_1 = require("get-all-files");
 const vscode_1 = require("vscode");
+const fs = require("fs");
+const vscode = require("vscode");
 class GateFunctions {
     async getFiles(searchSettings, files) {
         let _files = [];
@@ -41,4 +43,19 @@ class GetFileSettings {
     }
 }
 exports.GetFileSettings = GetFileSettings;
+async function readFileByLines(pathOfFileToSearchIn) {
+    try {
+        const document = await fs.readFileSync(pathOfFileToSearchIn, "utf8");
+        const documentStringLines = document.trim().split('\n');
+        return documentStringLines;
+    }
+    catch (Error) {
+        displayErrorMessage("There is no such file!");
+    }
+}
+exports.readFileByLines = readFileByLines;
+function displayErrorMessage(message) {
+    vscode.window.showErrorMessage(message);
+}
+exports.displayErrorMessage = displayErrorMessage;
 //# sourceMappingURL=gate-functions.js.map

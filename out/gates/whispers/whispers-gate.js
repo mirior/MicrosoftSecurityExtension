@@ -4,6 +4,7 @@ exports.WhispersGate = void 0;
 const customer_gate_1 = require("../../customGate/customer-gate");
 const gate_functions_1 = require("../../customGate/gate-functions");
 const gate_data_1 = require("../../customGate/gate-data");
+const vscode = require("vscode");
 const FormData = require("form-data");
 const fs = require('fs');
 // const formData = require('form-data');
@@ -25,23 +26,30 @@ class WhispersGate extends customer_gate_1.CustomGate {
             let fileStream = fs.createReadStream(path);
             form.append(path, fileStream);
         });
-        let whispersResult = await this.sendFileToWhispers(form);
-        //  const { data } = whispersResult; // make sure we can get data
-        // let toJSON = JSON.parse(data);
-        let secrets = [];
-        //  whispersResult=whispersResult.replace('[','').replace(']','').split('}, ')
-        whispersResult.forEach((res) => {
-            const fileName = res['name'].split('.')[0];
-            let data = new gate_data_1.GateData();
-            data.data = [new gate_data_1.ResultsList("secrets", [new gate_data_1.FileMessages(res['name'], fileName, [new gate_data_1.GateResult(new gate_data_1.Location(0, 0), res['secrets'])])])];
-            secrets.push(data);
-        });
-        // let secrets:GateData=new GateData();
-        // secrets.data=[new ResultsList("secrets",[new FileMessages("res['name']","fileName",[new GateResult(new Location(0,0), whispersResult)])])];
-        //     // return secrets[0];
-        return secrets[0];
+        try {
+            let whispersResult = await this.sendFilesToWhispers(form);
+            let whispersResultArr = JSON.parse(whispersResult.replaceAll("'", '"'));
+            let secrets = new gate_data_1.GateData();
+            secrets.data = [new gate_data_1.ResultsList("secrets", [])];
+            let resultNumber = 0;
+            whispersResultArr.forEach((res) => {
+                const filePath = res['name'];
+                const fileName = filePath.slice(filePath.lastIndexOf('\\'), filePath.length).slice(1);
+                secrets.data[0].result.push(new gate_data_1.FileMessages(filePath, fileName, []));
+                res['secrets'].forEach((sec) => {
+                    secrets.data[0].result[resultNumber].messages.push(new gate_data_1.GateResult(new gate_data_1.Location(1, 0), sec));
+                });
+                resultNumber++;
+            });
+            vscode.window.showInformationMessage("Whispers is ready!");
+            return secrets;
+        }
+        catch (ex) {
+            (0, gate_functions_1.displayErrorMessage)("error");
+            return new gate_data_1.GateData();
+        }
     }
-    async sendFileToWhispers(data) {
+    async sendFilesToWhispers(data) {
         const response = await axios({
             //sending to the api
             method: "post",
@@ -51,7 +59,6 @@ class WhispersGate extends customer_gate_1.CustomGate {
                 "Content-type": "multipart/form-data"
             }
         });
-        // const response=await axios.post("https://whisper-gate.azurewebsites.net/api/whispersGate",data,data.getHeaders());
         return response.data;
     }
 }

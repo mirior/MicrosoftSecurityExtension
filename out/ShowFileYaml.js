@@ -3,9 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.jumpSpecifiedLine = exports.showTextDocumentWithErrors = void 0;
 const vscode_1 = require("vscode");
 const highLight_1 = require("./highLight");
+const search_1 = require("./search");
 async function showTextDocumentWithErrors(result, documentText) {
     result.forEach(async (res) => {
-        (0, highLight_1.highLightTextInFile)(res.location.lineNumber - 1, res.location.columnNumber);
+        res.location.lineNumber = (0, search_1.hierarchySearchInFile)(documentText, [res.message.split(' ')[0]]).requestedLine;
+        (0, highLight_1.highLightTextInFile)(res.location.lineNumber, res.location.columnNumber);
     });
 }
 exports.showTextDocumentWithErrors = showTextDocumentWithErrors;
