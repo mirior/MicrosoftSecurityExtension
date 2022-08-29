@@ -36,7 +36,6 @@ export class WhispersGate extends CustomGate {
             form.append(path, fileStream);//Append all files to the data
         });
         try {
-
             let whispersResult = await this.sendFilesToWhispers(form);//Sending the files to whispers api
             let whispersResultArr = JSON.parse(whispersResult.replaceAll("'", '"'));// parse the result to JSON object
             let secrets = new GateData();// Init secrets of files for the function response
@@ -56,7 +55,7 @@ export class WhispersGate extends CustomGate {
             });
             vscode.window.showInformationMessage("Whispers is ready!");
             return secrets;
-        } catch (ex:any) {
+        } catch (ex: any) {
             displayErrorMessage(ex.message);
             return new GateData();
         }

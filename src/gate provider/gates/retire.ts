@@ -6,7 +6,7 @@ const appRoot = require('app-root-path');
 
 export class RetireGate extends CustomGate {
     labels: string[] = ["High", "Medium", "Low"];
-    label: string = "Retire";
+    label: string = "RetireJS";
     description: string = "";
 
     public async scanData(): Promise<GateData> {
