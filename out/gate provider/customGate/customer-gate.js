@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomGate = void 0;
 const vscode_1 = require("vscode");
 const category_1 = require("../../treeItemClasses/category");
+const gate_data_1 = require("./gate-data");
 const gate_functions_1 = require("./gate-functions");
 const gate_1 = require("../gates/gate");
 //After implementing the gate, a name and path must be added to the file gateList.json
@@ -44,8 +45,8 @@ class CustomGate extends gate_1.Gate {
     //This function refreshes the information and UI
     async refresh() {
         if (this.files.length > 0) {
-            const results = this.gateScanData.data?.filter((element) => {
-                element.result.map((item) => {
+            const results = this.gateScanData?.data?.filter((element) => {
+                element.result?.map((item) => {
                     let arr = this.files;
                     arr = arr.filter(file => {
                         return file.slice(file.indexOf(':')) === item.filePath.slice(file.indexOf(':'));
@@ -55,7 +56,11 @@ class CustomGate extends gate_1.Gate {
             });
             this.gateScanData.data = results;
             this.scanData().then((data) => {
-                this.gateScanData.data?.concat(data.data);
+                for (let index = 0; index < this.labels.length; index++) {
+                    this.gateScanData?.data[index]?.result ?
+                        this.gateScanData?.data[index].result.concat(data?.data[index]?.result) :
+                        this.gateScanData.data[index] = new gate_data_1.ResultsList(data?.data[index]?.label, data?.data[index]?.result);
+                }
             });
             this.files = [];
             this.myProvider?.refresh();
@@ -63,12 +68,15 @@ class CustomGate extends gate_1.Gate {
     }
     //This function return the hierarchy of the gate
     getMoreChildren(element) {
-        this.myProvider = element;
-        let resultArr = [];
-        this.labels.map((l) => {
-            resultArr.push(new category_1.Category(l, vscode_1.TreeItemCollapsibleState.Collapsed, this.gateScanData?.data.find((e) => e.label === l)));
-        });
-        return Promise.resolve(resultArr);
+        if (this.getIsActive()) {
+            this.myProvider = element;
+            let resultArr = [];
+            this.labels.map((l) => {
+                resultArr.push(new category_1.Category(l, vscode_1.TreeItemCollapsibleState.Collapsed, this.gateScanData?.data.find((e) => e.label === l)));
+            });
+            return Promise.resolve(resultArr);
+        }
+        return Promise.resolve([]);
     }
     //This function returns files according to the data sent
     async getFiles(searchSettings) {

@@ -3,7 +3,7 @@ import { GatesProvider } from "../gate-provider";
 import { Category } from "../../treeItemClasses/category";
 import { File } from "../../treeItemClasses/file";
 import { TreeItem } from "../../treeItemClasses/tree-item";
-import { GateData } from "./gate-data";
+import { GateData, ResultsList } from "./gate-data";
 import { GateFunctions, GetFileSettings } from "./gate-functions";
 import { Gate } from "../gates/gate";
 import * as vscode from 'vscode';
@@ -39,7 +39,7 @@ export abstract class CustomGate extends Gate {
     }
 
     //This function runs when the gate is enabled
-    public async activate(extensionPath:string) {
+    public async activate(extensionPath: string) {
         this.setIsActive(true);
         this.scanData(extensionPath).then(data => this.gateScanData = data).then(() => {
             this.myProvider?.refresh();
@@ -67,10 +67,11 @@ export abstract class CustomGate extends Gate {
     }
 
     //This function refreshes the information and UI
+
     private async refresh() {
         if (this.files.length > 0) {
-            const results = this.gateScanData.data?.filter((element) => {
-                element.result.map((item) => {
+            const results = this.gateScanData?.data?.filter((element) => {
+                element.result?.map((item) => {
                     let arr = this.files;
                     arr = arr.filter(file => {
                         return file.slice(file.indexOf(':')) === item.filePath.slice(file.indexOf(':'));
@@ -82,7 +83,11 @@ export abstract class CustomGate extends Gate {
             });
             this.gateScanData.data = results;
             this.scanData().then((data) => {
-                this.gateScanData.data?.concat(data.data);
+                for (let index = 0; index < this.labels.length; index++) {
+                    this.gateScanData?.data[index]?.result ?
+                        this.gateScanData?.data[index].result.concat(data?.data[index]?.result) :
+                        this.gateScanData.data[index] = new ResultsList(data?.data[index]?.label, data?.data[index]?.result);
+                }
             });
             this.files = [];
             this.myProvider?.refresh();
@@ -91,12 +96,15 @@ export abstract class CustomGate extends Gate {
 
     //This function return the hierarchy of the gate
     public getMoreChildren(element?: TreeDataProvider<TreeItem> | undefined): Thenable<TreeItem[]> {
-        this.myProvider = <GatesProvider>element;
-        let resultArr: Category[] = [];
-        this.labels.map((l) => {
-            resultArr.push(new Category(l, TreeItemCollapsibleState.Collapsed, this.gateScanData?.data.find((e) => e.label === l)!));
-        });
-        return Promise.resolve(resultArr);
+        if (this.getIsActive()) {
+            this.myProvider = <GatesProvider>element;
+            let resultArr: Category[] = [];
+            this.labels.map((l) => {
+                resultArr.push(new Category(l, TreeItemCollapsibleState.Collapsed, this.gateScanData?.data.find((e) => e.label === l)!));
+            });
+            return Promise.resolve(resultArr);
+        }
+        return Promise.resolve([]);
     }
 
     //This function returns files according to the data sent
@@ -121,5 +129,5 @@ export abstract class CustomGate extends Gate {
     }
 
     //this abstract function that should return the results of the gate
-    public abstract scanData(extensionPath?:string): Promise<GateData>;
+    public abstract scanData(extensionPath?: string): Promise<GateData>;
 }
