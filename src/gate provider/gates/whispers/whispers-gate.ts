@@ -26,7 +26,7 @@ export class WhispersGate extends CustomGate {
 
         const form: FormData = new FormData(); //Data to be sent to the api
 
-        const configFilePath = vscode.workspace.workspaceFolders![0].uri.fsPath + "\\src\\gates\\whispers\\config.yaml";//my configuration file
+        const configFilePath = vscode.workspace.workspaceFolders![0].uri.fsPath + "\\MicrosoftSecurityExtension\\src\\gate provider\\gates\\whispers\\config.yaml";//my configuration file
         form.append(configFilePath, fs.createReadStream(configFilePath));//The config file should be sent first   
 
         const filePaths = await this.getFiles(new GetFileSettings([".yaml", ".json"])); //the appropriate file paths
@@ -35,7 +35,6 @@ export class WhispersGate extends CustomGate {
             form.append(path, fileStream);//Append all files to the data
         });
         try {
-
             let whispersResult = await this.sendFilesToWhispers(form);//Sending the files to whispers api
             let whispersResultArr = JSON.parse(whispersResult.replaceAll("'", '"'));// parse the result to JSON object
             let secrets = new GateData();// Init secrets of files for the function response
@@ -55,7 +54,7 @@ export class WhispersGate extends CustomGate {
             });
             vscode.window.showInformationMessage("Whispers is ready!");
             return secrets;
-        } catch (ex:any) {
+        } catch (ex: any) {
             displayErrorMessage(ex.message);
             return new GateData();
         }
