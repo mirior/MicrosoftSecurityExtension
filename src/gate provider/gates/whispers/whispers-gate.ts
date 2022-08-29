@@ -3,6 +3,7 @@ import { displayErrorMessage, GetFileSettings } from '../../customGate/gate-func
 import { FileMessages, GateData, GateResult, Location, ResultsList } from '../../customGate/gate-data';
 import * as vscode from 'vscode';
 import FormData = require('form-data');
+import path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 
@@ -22,11 +23,11 @@ export class WhispersGate extends CustomGate {
         super("whispers");
     }
 
-    public async scanData(): Promise<GateData> {
+    public async scanData(extensionPath:string): Promise<GateData> {
 
         const form: FormData = new FormData(); //Data to be sent to the api
 
-        const configFilePath = vscode.workspace.workspaceFolders![0].uri.fsPath + "\\src\\gates\\whispers\\config.yaml";//my configuration file
+        const configFilePath =path.join(extensionPath,"\\gates\\whispers\\config.yaml");//my configuration file
         form.append(configFilePath, fs.createReadStream(configFilePath));//The config file should be sent first   
 
         const filePaths = await this.getFiles(new GetFileSettings([".yaml", ".json"])); //the appropriate file paths

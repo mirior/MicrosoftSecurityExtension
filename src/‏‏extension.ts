@@ -12,6 +12,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	var myGates = new GatesProvider();
 	let activeTextDocument: string[] | undefined;
+	const extensionPath=context.asAbsolutePath("src");
 
 	vscode.window.registerTreeDataProvider(
 		'package-gates',
@@ -48,7 +49,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	vscode.commands.registerCommand('customGate.activate', async (arg) => {
-		arg.activate();
+		arg.activate(extensionPath);
 		arg.contextValue = "anyGate";
 		vscode.commands.executeCommand('setContext', 'anyGateActive', true);
 		myGates.refresh();

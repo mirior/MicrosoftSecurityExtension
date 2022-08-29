@@ -43,9 +43,9 @@ export abstract class CustomGate extends Gate {
  
 
     //This function runs when the gate is enabled
-    public async activate() {
+    public async activate(extensionPath:string) {
         this.setIsActive(true);
-        this.scanData().then(data => this.gateScanData = data).then(() => {
+        this.scanData(extensionPath).then(data => this.gateScanData = data).then(() => {
             this.myProvider?.refresh();
         });
         this.listenerSaveEvent();
@@ -125,5 +125,5 @@ export abstract class CustomGate extends Gate {
     }
 
     //this abstract function that should return the results of the gate
-    public abstract scanData(): Promise<GateData>;
+    public abstract scanData(extensionPath?:string): Promise<GateData>;
 }

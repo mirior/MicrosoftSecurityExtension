@@ -35,7 +35,7 @@ export class Gate extends TreeItem {
     return Promise.resolve([]);
   }
 
-  public async activate() {
+  public async activate(extensionPath?:string) {
     await this.setIsActive(true);
     vscode.window.showInformationMessage('The gate was successfully activated');
 
