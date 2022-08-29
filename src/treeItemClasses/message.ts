@@ -6,7 +6,7 @@ export class MessageItem extends TreeItem {
 
   constructor(
     public readonly item: string,
-    public readonly location: Location,
+    public readonly location: Location | string,
     public readonly path: string,
     // public readonly reason: string,
     public readonly command?: vscode.Command,

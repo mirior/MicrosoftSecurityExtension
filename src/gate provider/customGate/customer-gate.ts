@@ -6,7 +6,7 @@ import { TreeItem } from "../../treeItemClasses/tree-item";
 import { GateData } from "./gate-data";
 import { GateFunctions, GetFileSettings } from "./gate-functions";
 import { Gate } from "../gates/gate";
-
+import * as vscode from 'vscode';
 
 
 //After implementing the gate, a name and path must be added to the file gateList.json
@@ -33,14 +33,10 @@ export abstract class CustomGate extends Gate {
     //Set functions for generic gate
     private functions = new GateFunctions();
 
-    abstract contextValue?: string | undefined;
-
-    constructor(label: string = "custom", isActive: boolean = false,contextValue: string = "gate") {
-        const con= isActive?"anyGate":"gate";
-         super(label, TreeItemCollapsibleState.Collapsed, con, isActive);
- 
-     }
- 
+    constructor(label: string = "custom", isActive: boolean = false, contextValue: string = "gate") {
+        const con = isActive ? "anyGate" : "gate";
+        super(label, TreeItemCollapsibleState.Collapsed, con, isActive);
+    }
 
     //This function runs when the gate is enabled
     public async activate(extensionPath:string) {
@@ -73,7 +69,7 @@ export abstract class CustomGate extends Gate {
     //This function refreshes the information and UI
     private async refresh() {
         if (this.files.length > 0) {
-            const results = this.gateScanData.data.filter((element) => {
+            const results = this.gateScanData.data?.filter((element) => {
                 element.result.map((item) => {
                     let arr = this.files;
                     arr = arr.filter(file => {
@@ -86,7 +82,7 @@ export abstract class CustomGate extends Gate {
             });
             this.gateScanData.data = results;
             this.scanData().then((data) => {
-                this.gateScanData.data.concat(data.data);
+                this.gateScanData.data?.concat(data.data);
             });
             this.files = [];
             this.myProvider?.refresh();
@@ -98,7 +94,7 @@ export abstract class CustomGate extends Gate {
         this.myProvider = <GatesProvider>element;
         let resultArr: Category[] = [];
         this.labels.map((l) => {
-            resultArr.push(new Category(l, TreeItemCollapsibleState.Collapsed, this.gateScanData.data.find((e) => e.label === l)!));
+            resultArr.push(new Category(l, TreeItemCollapsibleState.Collapsed, this.gateScanData?.data.find((e) => e.label === l)!));
         });
         return Promise.resolve(resultArr);
     }

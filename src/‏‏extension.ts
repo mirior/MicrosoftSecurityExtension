@@ -7,6 +7,8 @@ import { KubesecGate } from './gate provider/gates/kubesec/kubesec-gate';
 import { MessageItem } from './treeItemClasses/message';
 import { readFileByLines } from './gate provider/customGate/gate-functions';
 import { jumpSpecifiedLine } from './gate provider/showFileYaml';
+import { Context } from 'mocha';
+import { Location } from './gate provider/customGate/gate-data';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -73,7 +75,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('customGate.showFileData', async (args, arg: MessageItem) => {
 		const textDocument = await vscode.workspace.openTextDocument(args);
 		await vscode.window.showTextDocument(textDocument);
-		jumpSpecifiedLine(arg.location.lineNumber, args);
+		if (typeof (arg.location) === typeof (Location)) {
+			jumpSpecifiedLine((arg.location as Location).lineNumber - 1, args);
+		}
+		else {
+			vscode.env.openExternal(vscode.Uri.parse(arg.location.toString()));
+		}
 	});
 
 	vscode.commands.registerCommand('showTextDocument', async (arg: any, lineNumber: any) => {
