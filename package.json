@@ -42,7 +42,7 @@
       },
       {
         "command": "gates.activate",
-        "title": "activate"
+        "title": "Activate"
       },
       {
         "command": "microsoft-security-gate.gates",
@@ -60,11 +60,11 @@
       },
       {
         "command": "kubesec.showData",
-        "title": "showData"
+        "title": "ShowData"
       },
       {
         "command": "customGate.showData",
-        "title": "showData"
+        "title": "ShowData"
       }
     ],
     "viewsContainers": {
